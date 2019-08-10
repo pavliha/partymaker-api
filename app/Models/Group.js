@@ -11,32 +11,8 @@ class Group extends Model {
     return 'App/Policies/Group'
   }
 
-  getStartTime(value) {
-    return (new Date(value)).toString()
-  }
-
-  admin() {
-    return this.belongsTo('App/Models/User', 'admin_id', 'id')
-  }
-
-  address() {
-    return this.belongsTo('App/Models/Address', 'address_id', 'id')
-  }
-
-  users() {
-    return this.belongsToMany('App/Models/User')
-  }
-
   place() {
     return this.belongsTo('App/Models/Place')
-  }
-
-  event() {
-    return this.belongsTo('App/Models/Event')
-  }
-
-  pictures() {
-    return this.belongsToMany('App/Models/Picture')
   }
 
   async isMember(user_id) {

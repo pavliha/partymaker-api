@@ -4,9 +4,7 @@ const Hash = use('Hash')
 class AuthController {
 
   async login({ request, auth }) {
-
     const { email, password } = request.all()
-
     return auth.withRefreshToken().attempt(email, password, true)
   }
 

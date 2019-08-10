@@ -9,12 +9,11 @@ Route.get('/', 'DocsController.index')
  * Authentication routes
  *
  * */
-Route.post('login', 'AuthController.login').validator('Auth/Login')
-Route.post('register', 'AuthController.register').validator('Auth/Register')
-Route.post('login/facebook', 'AuthController.facebook')
-Route.post('login/google', 'AuthController.google')
-
-Route.get('user', 'AuthController.user').middleware('auth')
+Route.post('/auth/login', 'AuthController.login').validator('Auth/Login')
+Route.post('/auth/register', 'AuthController.register').validator('Auth/Register')
+Route.post('/auth/login/facebook', 'AuthController.facebook')
+Route.post('/auth/login/google', 'AuthController.google')
+Route.get('/auth/user', 'AuthController.user').middleware('auth')
 
 /**
  *
@@ -41,21 +40,11 @@ Route.resource('places', 'PlaceController')
  * Group routes
  *`
  * */
-Route.resource('groups/:group_id/members', 'Group/MemberController')
-  .middleware('auth')
-  // .validator([['groups/:group_id/members.store', 'Group/Member/Create']])
+
+Route.resource('groups/:group_id/members', 'Group/MemberController').middleware('auth')
 
 Route.resource('groups', 'GroupController')
   .validator([['groups.store', 'Group/Create'], ['groups.update', 'Group/Edit']])
-  .middleware(SUD)
-
-/**
- *
- * Events routes
- *`
- * */
-Route.resource('events', 'EventController')
-  .validator([['events.store', 'Event/Create']])
   .middleware(SUD)
 
 /**
@@ -64,10 +53,6 @@ Route.resource('events', 'EventController')
  *
  * */
 
-Route.resource('places/:place_id/votes', 'Place/RatingController')
-  .middleware('auth')
-
-// Route.resource('places', 'Place/PlaceController')
-//   .middleware(SUD)
+Route.resource('places', 'PlaceController').middleware(SUD)
 
 Route.resource('upload', 'UploadController')
