@@ -6,119 +6,68 @@ function-paren-newline,
 no-console,
 */
 
-const Chance = require('chance')
-const flatten = require('lodash/flattenDeep')
 const USERS = require('./users')
+const ENTERTAINMENTS = require('./entertainments')
 const PLACES = require('./places')
-const GROUPS = require('./groups')
-const EVENTS = require('./events')
+const ROOMS = require('./rooms')
+const MESSAGES = require('./messages')
+
 const Factory = use('Factory')
 const User = use('App/Models/User')
+const Entertainment = use('App/Models/Entertainment')
+const Place = use('App/Models/Place')
+const Room = use('App/Models/Room')
+const Message = use('App/Models/Message')
 
-const PlaceRepository = use('App/Repositories/Place')
-const EventRepository = use('App/Repositories/Event')
-const GroupRepository = use('App/Repositories/Group')
-
-function printProgress(text) {
+function log(text) {
   console.log(text)
   return text
 }
 
 class Seeder {
 
-  constructor() {
-    this.chance = new Chance()
-    this.placeRepo = new PlaceRepository()
-    this.eventRepo = new EventRepository()
-    this.groupRepo = new GroupRepository()
+  createEntertainments() {
+    log('creating entertainments...')
+    return Promise.all(ENTERTAINMENTS.map(fields => Entertainment.create(fields)))
+  }
 
-    this.createRealGroups = this.createRealGroups.bind(this)
-    this.createFakeGroups = this.createFakeGroups.bind(this)
-    this.createPlaces = this.createPlaces.bind(this)
-    this.createUsers = this.createUsers.bind(this)
+  createPlaces() {
+    log('creating places...')
+    return Promise.all(PLACES.map(fields => Place.create(fields)))
   }
 
   async createUsers() {
-    printProgress('creating users...')
-    const defaultUsers = await Promise.all(USERS.map(user => User.create({ ...user })))
+    log('creating users...')
+    const defaultUsers = await Promise.all(USERS.map(user => User.create(user)))
     const randomUsers = await Factory.model('App/Models/User').createMany(5)
-
     return [...defaultUsers, ...randomUsers]
   }
 
-  createPlaces(users) {
-    printProgress('creating places...')
-    const placeModels = PLACES.map(place =>
-      this.placeRepo.create({ ...place, admin: this.chance.pickone(users) }),
-    )
-
-    return Promise.all(placeModels)
+  createRooms() {
+    log('creating rooms...')
+    return Promise.all(ROOMS.map(fields => Room.create(fields)))
   }
 
-  createEvents(users) {
-    printProgress('creating places...')
-    const eventModels = EVENTS.map(event =>
-      this.eventRepo.create({ ...event, admin: this.chance.pickone(users) }),
-    )
-
-    return Promise.all(eventModels)
+  addUsersToRoom(rooms, users) {
+    log('adding users to rooms...')
+    return Promise.all(rooms.map(room => room.users().attach(users.map(u => u.id))))
   }
 
-  createRealGroups(users) {
-    printProgress('creating real groups...')
-    return Promise.all(GROUPS.map(group =>
-      this.groupRepo.create({
-        admin: this.chance.pickone(users),
-        ...group,
-      }),
-    ))
-  }
-
-  createFakeGroups(users, places, events) {
-    printProgress('creating fake groups...')
-
-    const promises = Array.from(new Array(20), async () => {
-      const admin = this.chance.pickone(users)
-      const address = await Factory.model('App/Models/Address').create()
-      const group = await Factory.model('App/Models/Group').create({
-        admin,
-        address,
-        place: this.chance.pickone(places),
-        event: this.chance.pickone(events),
-      })
-
-      await group.users().attach([admin.id])
-      await group.users().attach(users.map(user => user.id))
-
-      return group
-    })
-
-    return Promise.all(flatten(promises))
-  }
-
-  createFakeRating(user, place) {
-    return Factory.model('App/Models/PlaceRating').create({ user, place })
-  }
-
-  createFakeRatings(users, places) {
-    printProgress('creating fake ratings...')
-    const promises = users.map(user => places.map(place => this.createFakeRating(user, place)))
-
-    return Promise.all(flatten(promises))
+  async createMessages() {
+    log('creating messages...')
+    await Promise.all(MESSAGES.map(fields => Message.create(fields)))
   }
 
   async run() {
     const users = await this.createUsers()
-    const places = await this.createPlaces(users)
-    const events = await this.createEvents(users)
-
-    await this.createRealGroups(users)
-    await this.createFakeGroups(users, places, events)
-    await this.createFakeRatings(users, places)
+    await this.createEntertainments()
+    await this.createPlaces()
+    const rooms = await this.createRooms()
+    await this.addUsersToRoom(rooms, users)
+    await this.createMessages()
 
     return true
   }
 }
 
 module.exports = Seeder
-

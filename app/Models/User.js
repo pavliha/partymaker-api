@@ -4,8 +4,12 @@ const Hash = use('Hash')
 const Model = use('Model')
 
 class User extends Model {
+
   static get hidden() {
-    return ['created_at', 'updated_at', 'password', 'provider_id', 'provider_token', 'address_id', 'admin_id']
+    return [
+      'pivot',
+      'password',
+    ]
   }
 
   static get policy() {
@@ -14,7 +18,6 @@ class User extends Model {
 
   static boot() {
     super.boot()
-
     this.addHook('beforeSave', async (userInstance) => {
       if (userInstance.dirty.password) {
         userInstance.password = await Hash.make(userInstance.password)
@@ -40,12 +43,43 @@ class User extends Model {
     return `${Env.get('APP_URL')}${url}`
   }
 
+
+  static async createFromSocial(fields) {
+    const createdUser = await this.create({
+      name: fields.name,
+      email: fields.email,
+      avatar_url: fields.avatar_url,
+      phone: fields.phone,
+      is_active: true
+    })
+
+    await createdUser.socials().create({
+      provider: fields.provider,
+      provider_id: fields.provider_id
+    })
+
+
+    return createdUser
+  }
+
   tokens() {
     return this.hasMany('App/Models/Token')
   }
 
-  groups() {
-    return this.hasMany('App/Models/Group', 'id', 'admin_id')
+  resetTokens() {
+    return this.hasMany('App/Models/ResetToken')
+  }
+
+  socials() {
+    return this.hasMany('App/Models/Social')
+  }
+
+  account() {
+    return this.hasOne('App/Models/Account')
+  }
+
+  rooms() {
+    return this.belongsToMany('App/Models/Room')
   }
 }
 

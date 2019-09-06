@@ -10,7 +10,6 @@
 |
 */
 
-const Env = use('Env')
 const Factory = use('Factory')
 
 Factory.blueprint('App/Models/User', (faker) => ({
@@ -20,13 +19,12 @@ Factory.blueprint('App/Models/User', (faker) => ({
   phone: faker.phone({ formatted: false }),
   password: 'qwerty123',
 }))
-Factory.blueprint('App/Models/Group', (faker, i, data) => {
+
+Factory.blueprint('App/Models/Event', (faker, i, data) => {
   const bool = faker.bool()
   return {
     admin_id: data.admin.id,
-    address_id: bool ? data.address.id : null,
-    place_id: bool ? null : data.place.id,
-    event_id: bool ? null : data.event.id,
+    place_id: data.place.id,
     title: faker.pickone(['Идем шашлыки', 'Гуляем в квартире', 'Едем на дачу', 'Идем на пляж', 'На площади', 'Автомобили', 'Другое']),
     date: faker.date({ year: 2018 }),
     description: faker.paragraph({ sentences: 1 }),
@@ -49,12 +47,6 @@ Factory.blueprint('App/Models/Address', (faker) => ({
   lat: faker.latitude(),
   lng: faker.longitude(),
   placeId: null,
-}))
-
-Factory.blueprint('App/Models/PlaceRating', (chance, i, data) => ({
-  user_id: data.user.id,
-  place_id: data.place.id,
-  rating: chance.integer({ min: 3, max: 5 }),
 }))
 
 Factory.blueprint('App/Models/Place', (faker, i, data) => {

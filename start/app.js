@@ -1,4 +1,10 @@
-'use strict'
+const path = require('path')
+const moment = require('moment')
+
+moment.locale('ru')
+
+const local = name => path.join(__dirname, '..', 'providers', name)
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +26,12 @@ const providers = [
   '@adonisjs/shield/providers/ShieldProvider',
   '@adonisjs/session/providers/SessionProvider',
   '@adonisjs/auth/providers/AuthProvider',
+  '@adonisjs/framework/providers/ViewProvider',
   '@adonisjs/validator/providers/ValidatorProvider',
-  'adonis-lucid-update-or-create/providers/UpdateOrCreateProvider'
+  'adonis-lucid-update-or-create/providers/UpdateOrCreateProvider',
+  '@adonisjs/mail/providers/MailProvider',
+  '@adonisjs/websocket/providers/WsProvider',
+  local('Sms/providers/SmsProvider'),
 ]
 
 /*
@@ -50,7 +60,9 @@ const aceProviders = [
 |   { Route: 'Adonis/Src/Route' }
 |
 */
-const aliases = {}
+const aliases = {
+  Sms: 'Adonis/Addons/Sms'
+}
 
 /*
 |--------------------------------------------------------------------------
