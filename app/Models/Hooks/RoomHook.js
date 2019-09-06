@@ -10,11 +10,9 @@ RoomHook.afterCreate = async (room) => {
   room.merge({ invite_token })
   await room.save()
 
-  const inviteText = 'Привет, Давай пригласим сюда твоих друзей и посмотрим что они скажут насчет этого всего?'
-  const linkText = 'Скинь им вот эту ссылку что бы пригласить'
-  const text = `
-    ${inviteText} ${linkText}
-    ${Env.get('FRONTEND_URL')}/invite/${invite_token}
+  const inviteText = 'Привет, Давай пригласим сюда твоих друзей и посмотрим что они скажут насчет этого всего?\n'
+  const linkText = 'Скинь им вот эту ссылку что бы пригласить\n\n'
+  const text = `${inviteText}${linkText}${Env.get('FRONTEND_URL')}/invite/${invite_token}
     `
 
   Message.create({ text, room_id: room.id, user_id: 1 })

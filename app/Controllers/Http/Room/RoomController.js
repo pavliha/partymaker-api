@@ -1,7 +1,6 @@
 const Room = use('App/Models/Room')
-const Message = use('App/Models/Message')
+const Event = use('Event')
 const moment = require('moment')
-const Ws = use('Ws')
 
 
 const diff = (fields, room, name) => fields[name] && room[name] !== fields[name]
@@ -34,7 +33,9 @@ class RoomController {
   async store({ request, response, auth }) {
     const fields = request.all()
     const room = await Room.create(fields)
-    room.users().attach([auth.user.id])
+    if (auth.user) {
+      room.users().attach([auth.user.id])
+    }
 
     return response.created(room)
   }
@@ -83,8 +84,7 @@ class RoomController {
       await room.notify(`${auth.user.name} установил(а) место события ${newRoom.place.title}`)
     }
 
-    const topic = Ws.getChannel('room:*').topic(`room:${room.id}`)
-    if (topic) topic.broadcast('room:updated', newRoom)
+    Event.fire('ws:room', room.id, 'room:updated', newRoom)
 
     return response.updated(newRoom)
   }

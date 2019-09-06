@@ -1,6 +1,7 @@
 const Route = use('Route')
 
 const CUD = new Map([[['store', 'update', 'destroy'], ['auth']]])
+const UD = new Map([[['update', 'destroy'], ['auth']]])
 const LD = new Map([[['index', 'destroy'], ['auth']]])
 
 Route.group(() => {
@@ -11,7 +12,7 @@ Route.group(() => {
    *
    * */
   Route.resource('rooms', 'RoomController')
-    .middleware(CUD)
+    .middleware(UD)
     .apiOnly()
     .validator([
       ['rooms.index', 'Room/Index'],
