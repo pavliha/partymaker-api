@@ -16,6 +16,7 @@ class PlaceSchema extends Schema {
       table.string('phone')
       table.integer('admin_id').unsigned().references('id').inTable('users')
       table.integer('entertainment_id').unsigned().references('id').inTable('entertainments')
+      table.boolean('is_active').defaultTo(true)
       table.timestamps()
     })
   }

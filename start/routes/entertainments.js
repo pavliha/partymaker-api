@@ -5,6 +5,8 @@ const Route = use('Route')
  * Entertainment routes
  *
  * */
+
+Route.post('entertainments/sort', 'EntertainmentController.sort')
 Route.resource('entertainments', 'EntertainmentController')
   .validator([
     ['entertainments.store', 'Entertainment/Store'],

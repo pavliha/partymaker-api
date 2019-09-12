@@ -12,13 +12,14 @@ module.exports = class Update {
 
   get rules() {
     return {
-      title: 'required|string',
-      picture_url: 'required|string',
-      price: 'required|string',
-      phone: 'required|string',
-      map_url: 'required|string',
-      website_url: 'required|string',
-      working_hours: 'required|string',
+      title: 'string',
+      picture_url: 'string',
+      price: 'string',
+      phone: 'string',
+      map_url: 'string',
+      website_url: 'string',
+      working_hours: 'string',
+      is_active: 'boolean',
     }
   }
 

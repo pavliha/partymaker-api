@@ -21,7 +21,9 @@ class PlaceController {
   async index({ request }) {
     const { page, limit } = request.all()
 
-    return Place.query().paginate({ page, limit })
+    return Place.query()
+      .with('entertainment')
+      .paginate({ page, limit })
   }
 
   /**

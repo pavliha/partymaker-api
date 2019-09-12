@@ -20,7 +20,9 @@ class EntertainmentController {
    */
   async index() {
     return Entertainment.query()
-      .with('places')
+      .with('places', builder => builder.where({ is_active: true }))
+      .where({ is_active: true })
+      .orderBy('order')
       .fetch()
   }
 
@@ -58,7 +60,7 @@ class EntertainmentController {
    */
   async update({ request, response, entertainment }) {
     const fields = request.all()
-    entertainment.merge({ fields })
+    entertainment.merge(fields)
     await entertainment.save()
     return response.updated(entertainment)
   }
@@ -74,6 +76,27 @@ class EntertainmentController {
     await entertainment.delete()
     return response.deleted()
   }
+
+  /**
+   * Sort entertainments.
+   * POST entertainments/sort
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async sort({ request, response }) {
+    const { sorted_ids } = request.all()
+    sorted_ids.map(async (id, index) => {
+      const entertainment = await Entertainment.find(id)
+      entertainment.merge({ order: index })
+      await entertainment.save()
+    })
+
+    return response.updated()
+  }
+
+
 }
 
 module.exports = EntertainmentController

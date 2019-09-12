@@ -8,6 +8,8 @@ class EntertainmentsSchema extends Schema {
     this.create('entertainments', (table) => {
       table.increments()
       table.string('title')
+      table.boolean('is_active').defaultTo(true)
+      table.integer('order')
       table.timestamps()
     })
   }
