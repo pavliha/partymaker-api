@@ -1,4 +1,4 @@
 #!/bin/bash
 git reset --hard origin/master
 git pull origin master
-pm2 restart server
+/home/dev/.npm-global/bin/pm2 restart server
