@@ -20,8 +20,8 @@ Route.group(() => {
   Route.put('auth/password/update', 'PasswordController.update').validator('Auth/Password/Update')
 
 
-  Route.get('auth/user', 'User/UserController.show')
-  Route.put('auth/user', 'User/UserController.update').validator('Auth/User/Update')
+  Route.get('auth/user', 'User/UserController.show').middleware('auth')
+  Route.put('auth/user', 'User/UserController.update').validator('Auth/User/Update').middleware('auth')
 
   Route.get('auth/user/account', 'User/AccountController.show')
   Route.put('auth/user/account', 'User/AccountController.update').validator('Auth/User/Account/Update')
