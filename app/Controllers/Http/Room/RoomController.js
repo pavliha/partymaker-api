@@ -98,7 +98,7 @@ class RoomController {
    */
   async destroy({ auth: { user }, response, room }) {
     await room.users().detach([user.id])
-    await room.notify(`${user.name} покинул к событие`)
+    await room.notify(`${user.name} покинул событие`)
 
     Event.fire('ws:room', room.id, 'guest:left', user)
 
