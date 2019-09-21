@@ -48,8 +48,15 @@ class PlaceController {
    * @param {object} ctx
    */
   async show({ params }) {
-    const place = await Place.query().where({ id: params.id }).firstOrFail()
-    const rating = await Rating.query().where({ place_id: params.id }).getAvg('rating')
+    const place = await Place
+      .query()
+      .with('comments', (builder) => builder.with('user'))
+      .where({ id: params.id })
+      .firstOrFail()
+
+    const rating = await Rating.query()
+      .where({ place_id: params.id })
+      .getAvg('rating')
 
     return {
       ...place.toJSON(),
