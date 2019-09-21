@@ -1,4 +1,3 @@
-
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -16,6 +15,7 @@ class RoomController {
   async index({ auth }) {
     return auth.user.rooms()
       .with('place')
+      .withCount('users as guest_count')
       .fetch()
   }
 }

@@ -47,7 +47,10 @@ class EntertainmentController {
    * @param {object} ctx
    */
   async show({ params }) {
-    return Entertainment.findOrFail(params.id)
+    return Entertainment.query()
+      .with('places')
+      .where({ id: params.id })
+      .firstOrFail()
   }
 
   /**

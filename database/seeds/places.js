@@ -71,7 +71,7 @@ module.exports = [
     entertainment_id: 2,
   },
   {
-    title: 'Покататься по острову Хортица',
+    title: 'Mont Blanc, Запорожская школа альпинизма, альпклуб Мотор',
     picture_url: 'http://hortica.zp.ua/ua/guide/north/143-veloprokat',
     working_hours: 'ежедневно с 7:00 до 19:00',
     price: 'от 300 грн/чел',
