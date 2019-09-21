@@ -3,10 +3,6 @@
 const Place = use('App/Models/Place')
 const Rating = use('App/Models/Rating')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
 /**
  * Resourceful controller for interacting with places
  */
@@ -49,6 +45,7 @@ class PlaceController {
   async show({ params }) {
     const place = await Place
       .query()
+      .with('photos')
       .with('comments', (builder) => builder.with('user'))
       .where({ id: params.id })
       .firstOrFail()
