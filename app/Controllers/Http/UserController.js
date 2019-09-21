@@ -1,20 +1,14 @@
 const User = use('App/Models/User')
-const UserRepository = use('App/Repositories/UserRepository')
-const autoBind = require('auto-bind')
 
 /**
  * Resourceful controller for interacting with users
  */
 class UserController {
+
   /**
    * Show a list of all users.
    * GET users
    */
-  constructor() {
-    autoBind(this)
-    this.user = new UserRepository()
-  }
-
   async index({ request }) {
     const { page, limit } = request.all()
     return User.query().paginate(page || 1, limit || 10)

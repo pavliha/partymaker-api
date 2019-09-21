@@ -12,6 +12,10 @@ class Place extends Model {
   entertainment() {
     return this.belongsTo('App/Models/Entertainment')
   }
+
+  ratings() {
+    return this.hasMany('App/Models/Rating')
+  }
 }
 
 module.exports = Place

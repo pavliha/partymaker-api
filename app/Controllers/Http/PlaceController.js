@@ -1,6 +1,7 @@
 'use strict'
 
 const Place = use('App/Models/Place')
+const Rating = use('App/Models/Rating')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -47,7 +48,13 @@ class PlaceController {
    * @param {object} ctx
    */
   async show({ params }) {
-    return Place.findOrFail(params.id)
+    const place = await Place.query().where({ id: params.id }).firstOrFail()
+    const rating = await Rating.query().where({ place_id: params.id }).getAvg('rating')
+
+    return {
+      ...place.toJSON(),
+      rating,
+    }
   }
 
   /**

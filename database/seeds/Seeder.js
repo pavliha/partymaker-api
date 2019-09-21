@@ -11,6 +11,7 @@ const ENTERTAINMENTS = require('./entertainments')
 const PLACES = require('./places')
 const ROOMS = require('./rooms')
 const MESSAGES = require('./messages')
+const RATINGS = require('./ratings')
 
 const Factory = use('Factory')
 const User = use('App/Models/User')
@@ -18,6 +19,7 @@ const Entertainment = use('App/Models/Entertainment')
 const Place = use('App/Models/Place')
 const Room = use('App/Models/Room')
 const Message = use('App/Models/Message')
+const Rating = use('App/Models/Rating')
 
 function log(text) {
   console.log(text)
@@ -34,6 +36,11 @@ class Seeder {
   createPlaces() {
     log('creating places...')
     return Promise.all(PLACES.map(fields => Place.create(fields)))
+  }
+
+  ratePlaces() {
+    log('rate places...')
+    return Promise.all(RATINGS.map(fields => Rating.create(fields)))
   }
 
   async createUsers() {
@@ -62,6 +69,7 @@ class Seeder {
     const users = await this.createUsers()
     await this.createEntertainments()
     await this.createPlaces()
+    await this.ratePlaces()
     const rooms = await this.createRooms()
     await this.addUsersToRoom(rooms, users)
     await this.createMessages()
