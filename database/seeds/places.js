@@ -10,6 +10,10 @@ module.exports = [
     website_url: 'http://www.laser-tag.zp.ua/',
     phone: '+380961039348',
     entertainment_id: 1,
+    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+              the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+              scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged.`
   },
   {
     title: 'Клуб “Stalker”',
@@ -20,6 +24,10 @@ module.exports = [
     website_url: 'http://www.igra.zp.ua/',
     phone: '+380689605760',
     entertainment_id: 1,
+    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+              the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+              scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged.`
   },
   {
     title: 'Клуб “Гранит”',
@@ -40,6 +48,10 @@ module.exports = [
     website_url: 'http://www.rikoshet.com.ua/',
     phone: '+380508787808',
     entertainment_id: 1,
+    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+              the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+              scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged.`
   },
   {
     title: 'Клуб “Остров Приключений”',
@@ -69,6 +81,10 @@ module.exports = [
     map_url: 'https://www.google.com/maps/place/Zaporizhia+Arch+Bridge/@47.8592032,35.0652423,16.53z/data=!4m5!3m4!1s0x0:0x5f9d5923298bec9e!8m2!3d47.8618822!4d35.0622238',
     website_url: 'http://hortica.zp.ua/vel1.jpg',
     entertainment_id: 2,
+    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+              the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+              scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged.`
   },
   {
     title: 'Mont Blanc, Запорожская школа альпинизма, альпклуб Мотор',
