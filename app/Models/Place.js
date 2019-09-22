@@ -24,6 +24,14 @@ class Place extends Model {
   photos() {
     return this.hasMany('App/Models/Photo')
   }
+
+  orders() {
+    return this.hasMany('App/Models/Order')
+  }
+
+  contacts() {
+    return this.hasOne('App/Models/Contact')
+  }
 }
 
 module.exports = Place

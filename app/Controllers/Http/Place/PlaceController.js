@@ -2,6 +2,7 @@
 
 const Place = use('App/Models/Place')
 const Rating = use('App/Models/Rating')
+const Order = use('App/Models/Order')
 
 /**
  * Resourceful controller for interacting with places
@@ -47,16 +48,16 @@ class PlaceController {
       .query()
       .with('photos')
       .with('comments', (builder) => builder.with('user'))
+      .with('contacts')
+      .with('entertainment')
       .where({ id: params.id })
       .firstOrFail()
 
-    const rating = await Rating.query()
-      .where({ place_id: params.id })
-      .getAvg('rating')
-
     return {
       ...place.toJSON(),
-      rating,
+      rating: await Rating.average(place.id),
+      rating_count: await Rating.count(place.id),
+      order_count: await Order.count(place.id),
     }
   }
 

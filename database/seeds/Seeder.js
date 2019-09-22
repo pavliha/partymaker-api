@@ -13,6 +13,7 @@ const ROOMS = require('./rooms')
 const MESSAGES = require('./messages')
 const RATINGS = require('./ratings')
 const COMMENTS = require('./comments')
+const CONTACTS = require('./contacts')
 
 const Factory = use('Factory')
 const User = use('App/Models/User')
@@ -22,6 +23,7 @@ const Room = use('App/Models/Room')
 const Message = use('App/Models/Message')
 const Rating = use('App/Models/Rating')
 const Comment = use('App/Models/Comment')
+const Contact = use('App/Models/Contact')
 
 function log(text) {
   console.log(text)
@@ -50,6 +52,10 @@ class Seeder {
     return Promise.all(COMMENTS.map(fields => Comment.create(fields)))
   }
 
+  addContacts() {
+    log('creating places contacts...')
+    return Promise.all(CONTACTS.map(fields => Contact.create(fields)))
+  }
 
   async createUsers() {
     log('creating users...')
@@ -77,6 +83,7 @@ class Seeder {
     const users = await this.createUsers()
     await this.createEntertainments()
     await this.createPlaces()
+    await this.addContacts()
     await this.ratePlaces()
     await this.commentPlaces()
     const rooms = await this.createRooms()
