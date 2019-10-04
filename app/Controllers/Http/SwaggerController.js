@@ -11,6 +11,11 @@ class SwaggerController {
   async index() {
     return await readFile(Helpers.publicPath('index.html'))
   }
+
+  async log({ request, response }) {
+    console.log(request.all())
+    return response.accepted()
+  }
 }
 
 module.exports = SwaggerController
