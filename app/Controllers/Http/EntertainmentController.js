@@ -36,7 +36,7 @@ class EntertainmentController {
    */
   async store({ request, response }) {
     const fields = request.all()
-    const entertainment = await Entertainment.create(fields)
+    const entertainment = await Entertainment.create({ ...fields, is_active: true })
     return response.created(entertainment)
   }
 
