@@ -7,7 +7,7 @@ const Route = use('Route')
  * */
 Route.get('/', 'IndexController.index')
 
-Route.get('/log', 'SwaggerController.log')
+Route.post('/log', 'SwaggerController.log')
 
 /**
  *
