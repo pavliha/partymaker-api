@@ -6,6 +6,7 @@ function-paren-newline,
 no-console,
 */
 
+const promiseSerial = require('promise-serial')
 const USERS = require('./users')
 const ENTERTAINMENTS = require('./entertainments')
 const PLACES = require('./places')
@@ -34,7 +35,7 @@ class Seeder {
 
   createEntertainments() {
     log('creating entertainments...')
-    return Promise.all(ENTERTAINMENTS.map(fields => Entertainment.create(fields)))
+    return promiseSerial(ENTERTAINMENTS.map(fields => () => Entertainment.create(fields)))
   }
 
   createPlaces() {

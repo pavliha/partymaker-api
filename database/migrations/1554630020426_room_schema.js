@@ -9,7 +9,7 @@ class RoomSchema extends Schema {
       table.increments()
       table.string('title')
       table.string('invite_token')
-      table.integer('place_id').unsigned().references('id').inTable('places').onDelete('CASCADE')
+      table.integer('place_id').unsigned().nullable().references('id').inTable('places').onDelete('SET NULL')
       table.date('date')
       table.string('time')
       table.timestamps()
