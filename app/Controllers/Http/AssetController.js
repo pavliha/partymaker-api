@@ -2,16 +2,11 @@
 
 const { basename } = require('path')
 const fs = require('fs')
-
 const Env = use('Env')
 const Helpers = use('Helpers')
 const Asset = use('App/Models/Asset')
 const unlink = Helpers.promisify(fs.unlink)
-
-function generateName(extension) {
-  return `${new Date().getTime()}.${extension}`
-}
-
+const { processUrl, processFile } = require('../../../utils')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -45,15 +40,15 @@ class AssetController {
    * @param {Response} ctx.response
    */
   async store({ request, response, auth }) {
-    const file = request.file('file')
-    const name = generateName(file.subtype)
-    const uploadsFolder = Helpers.publicPath('uploads')
-    await file.move(uploadsFolder, { name })
+    const url = request.input('url')
+    const fileName = url ? await processUrl(url) : await processFile(request)
+
     const asset = await Asset.create({
       admin_id: auth.user.id,
       title: request.input('title'),
-      url: `${Env.get('APP_URL')}/uploads/${name}`
+      url: `${Env.get('APP_URL')}/uploads/${fileName}`
     })
+
     return response.created(asset)
   }
 

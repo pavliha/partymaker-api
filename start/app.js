@@ -31,6 +31,7 @@ const providers = [
   'adonis-lucid-update-or-create/providers/UpdateOrCreateProvider',
   '@adonisjs/mail/providers/MailProvider',
   '@adonisjs/websocket/providers/WsProvider',
+  '@adonisjs/drive/providers/DriveProvider',
   local('Sms/providers/SmsProvider'),
 ]
 
