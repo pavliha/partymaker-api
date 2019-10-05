@@ -33,3 +33,12 @@ Route.resource('places.photos', 'Place/PhotoController')
   .middleware(new Map([[['index', 'store', 'update', 'destroy'], ['auth']]]))
   .apiOnly()
 
+Route.resource('places.contacts', 'Place/ContactController')
+  .validator([
+    ['places.contacts.store', 'Place/Contact/Store'],
+    ['places.contacts.update', 'Place/Contact/Update'],
+    ['places.contacts.destroy', 'Place/Contact/Destroy'],
+  ])
+  .middleware(new Map([[['index', 'store', 'update', 'destroy'], ['auth']]]))
+  .apiOnly()
+
