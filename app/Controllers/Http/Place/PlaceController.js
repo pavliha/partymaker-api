@@ -1,5 +1,6 @@
 'use strict'
 
+const Asset = use('App/Models/Asset')
 const Place = use('App/Models/Place')
 const Rating = use('App/Models/Rating')
 const Order = use('App/Models/Order')
@@ -84,6 +85,8 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async destroy({ place, response }) {
+    const asset = await Asset.findBy({ url: place.url })
+    if (!asset) asset.delete()
     await place.delete()
     return response.deleted()
   }
