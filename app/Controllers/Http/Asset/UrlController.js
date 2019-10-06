@@ -6,7 +6,7 @@ const Env = use('Env')
 const Helpers = use('Helpers')
 const Asset = use('App/Models/Asset')
 const unlink = Helpers.promisify(fs.unlink)
-const { processUrl, processFile } = require('../../../utils')
+const { processUrl } = require('../../../../utils')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -16,10 +16,10 @@ const { processUrl, processFile } = require('../../../utils')
 /**
  * Resourceful controller for interacting with assets
  */
-class AssetController {
+class UrlController {
   /**
    * Show a list of all assets.
-   * GET assets
+   * GET assets/url
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -33,15 +33,14 @@ class AssetController {
 
   /**
    * Create/save a new asset.
-   * POST assets
+   * POST assets/url
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async store({ request, response, auth }) {
-    const url = request.input('url')
-    const fileName = url ? await processUrl(url) : await processFile(request)
+    const fileName = await processUrl(request.input('url'))
 
     const asset = await Asset.create({
       admin_id: auth.user.id,
@@ -54,28 +53,26 @@ class AssetController {
 
   /**
    * Display a single asset.
-   * GET assets/:id
+   * GET assets/url/:id
    *
    * @param {object} ctx
    */
   async show({ params }) {
-    return Asset.find(params.id)
+    return Asset.findByOrFail({ url: params.url })
   }
 
   /**
    * Delete a asset with id.
-   * DELETE assets/:id
+   * DELETE assets/url/:id
    *
    * @param {object} ctx
    * @param {Response} ctx.response
    */
-  async destroy({ params, auth, response }) {
-    const asset = await Asset.findOrFail(params.id)
-    if (auth.user.cannot('delete', asset)) return response.forbidden()
+  async destroy({ response, asset }) {
     await unlink(Helpers.publicPath(`uploads/${basename(asset.url)}`))
     await asset.delete()
     return response.deleted('Asset was deleted successfully!')
   }
 }
 
-module.exports = AssetController
+module.exports = UrlController

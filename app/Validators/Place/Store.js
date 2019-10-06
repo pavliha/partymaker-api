@@ -16,9 +16,6 @@ module.exports = class Store {
       title: 'required|string',
       picture_url: 'required|string',
       price: 'required|string',
-      phone: 'required|string',
-      map_url: 'required|string',
-      website_url: 'required|string',
       working_hours: 'required|string',
     }
   }
