@@ -9,7 +9,7 @@ class ContactSchema extends Schema {
       table.increments()
       table.string('website_url')
       table.string('address')
-      table.string('instragram_url')
+      table.string('instagram_url')
       table.string('email')
       table.text('map_url')
       table.string('phone')

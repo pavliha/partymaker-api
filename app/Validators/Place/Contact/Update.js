@@ -5,8 +5,8 @@ module.exports = class Update {
   async authorize() {
     const { auth, response, params } = this.ctx
     this.ctx.contact = await Contact.findOrFail(params.id)
-    const isEditable = auth.user.can('edit', this.ctx.contact)
-    if (!isEditable) return response.forbidden()
+    const can = auth.user.is_superadmin
+    if (!can) return response.forbidden()
     return true
   }
 
