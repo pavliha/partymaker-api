@@ -85,8 +85,8 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async destroy({ place, response }) {
-    const asset = await Asset.findBy({ url: place.url })
-    if (!asset) asset.delete()
+    const asset = await Asset.findBy({ url: place.picture_url })
+    if (asset) asset.delete()
     await place.delete()
     return response.deleted()
   }
