@@ -9,6 +9,8 @@ class PlaceSchema extends Schema {
       table.increments()
       table.string('title')
       table.string('picture_url')
+      table.integer('players_min')
+      table.integer('players_max')
       table.string('working_hours')
       table.string('price')
       table.integer('admin_id').unsigned().references('id').inTable('users').onDelete('SET NULL')
