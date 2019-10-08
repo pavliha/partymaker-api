@@ -5,8 +5,8 @@ module.exports = class Update {
   async authorize() {
     const { auth, response, params } = this.ctx
     this.ctx.comment = await Comment.findOrFail(params.id)
-    const isEditable = auth.user.can('edit', this.ctx.comment)
-    if (!isEditable) return response.forbidden()
+    const can = auth.user.can('edit', this.ctx.comment)
+    if (!can) return response.forbidden()
     return true
   }
 
