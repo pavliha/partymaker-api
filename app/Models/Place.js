@@ -2,12 +2,18 @@
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
+const Env = use('Env')
 
 class Place extends Model {
 
   static get policy() {
     return 'App/Policies/Place'
   }
+
+  getPictureUrl(url) {
+    return `${Env.get('APP_URL')}${url}`
+  }
+
 
   entertainment() {
     return this.belongsTo('App/Models/Entertainment')
