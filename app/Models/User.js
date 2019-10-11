@@ -37,6 +37,10 @@ class User extends Model {
     return !this.can(action, model)
   }
 
+  setAvatarUrl(url) {
+    return url.replace(Env.get('APP_URL'), '')
+  }
+
   getAvatarUrl(url) {
     if (!url) return null
     if (url.includes('//')) return url

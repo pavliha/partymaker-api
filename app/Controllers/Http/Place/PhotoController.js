@@ -2,7 +2,6 @@
 
 const Photo = use('App/Models/Photo')
 
-
 /**
  * Resourceful controller for interacting with photos
  */

@@ -2,7 +2,6 @@
 
 const { basename } = require('path')
 const fs = require('fs')
-const Env = use('Env')
 const Helpers = use('Helpers')
 const Asset = use('App/Models/Asset')
 const unlink = Helpers.promisify(fs.unlink)
@@ -46,7 +45,7 @@ class AssetController {
     const asset = await Asset.create({
       admin_id: auth.user.id,
       title: request.input('title'),
-      url: `${Env.get('APP_URL')}/uploads/${fileName}`
+      url: `/uploads/${fileName}`
     })
 
     return response.created(asset)

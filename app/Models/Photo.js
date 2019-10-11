@@ -14,6 +14,10 @@ class Photo extends Model {
     return this.belongsTo('App/Models/Place')
   }
 
+  setUrl(url) {
+    return url.replace(Env.get('APP_URL'), '')
+  }
+
   getUrl(url) {
     return `${Env.get('APP_URL')}${url}`
   }

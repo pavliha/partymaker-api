@@ -9,6 +9,7 @@ class PlaceSchema extends Schema {
       table.increments()
       table.string('title')
       table.string('picture_url')
+      table.integer('age')
       table.integer('players_min')
       table.integer('players_max')
       table.string('working_hours')

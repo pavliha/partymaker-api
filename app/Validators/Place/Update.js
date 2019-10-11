@@ -10,16 +10,25 @@ module.exports = class Update {
     return true
   }
 
+  get sanitizationRules() {
+    return {
+      players_min: 'to_int',
+      players_max: 'to_int',
+      entertainment_id: 'to_int',
+      age: 'to_int',
+    }
+  }
+
   get rules() {
     return {
-      title: 'string',
+      title: 'required|string',
       picture_url: 'string',
+      age: 'number',
       price: 'string',
-      phone: 'string',
-      map_url: 'string',
-      website_url: 'string',
+      players_min: 'number',
+      players_max: 'number',
       working_hours: 'string',
-      is_active: 'boolean',
+      entertainment_id: 'required|number'
     }
   }
 

@@ -10,10 +10,13 @@ class Place extends Model {
     return 'App/Policies/Place'
   }
 
+  setPictureUrl(url) {
+    return url.replace(Env.get('APP_URL'), '')
+  }
+
   getPictureUrl(url) {
     return `${Env.get('APP_URL')}${url}`
   }
-
 
   entertainment() {
     return this.belongsTo('App/Models/Entertainment')

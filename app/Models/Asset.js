@@ -9,6 +9,10 @@ class Asset extends Model {
     return 'App/Policies/Asset'
   }
 
+  setUrl(url) {
+    return url.replace(Env.get('APP_URL'), '')
+  }
+
   getUrl(url) {
     return `${Env.get('APP_URL')}${url}`
   }

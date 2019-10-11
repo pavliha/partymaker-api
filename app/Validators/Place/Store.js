@@ -11,12 +11,25 @@ module.exports = class Store {
     return true
   }
 
+  get sanitizationRules() {
+    return {
+      players_min: 'to_int',
+      players_max: 'to_int',
+      entertainment_id: 'to_int',
+      age: 'to_int',
+    }
+  }
+
   get rules() {
     return {
       title: 'required|string',
-      picture_url: 'required|string',
-      price: 'required|string',
-      working_hours: 'required|string',
+      picture_url: 'string',
+      price: 'string',
+      age: 'number',
+      players_min: 'number',
+      players_max: 'number',
+      working_hours: 'string',
+      entertainment_id: 'required|number'
     }
   }
 
