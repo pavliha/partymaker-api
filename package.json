@@ -12,7 +12,8 @@
     "inspect": "nodemon --inspect server.js",
     "test": "adonis test",
     "boot": "npm run migrate && npm run seed",
-    "boot:inspect": "npm run migrate && node --inspect-brk `which adonis` seed"
+    "boot:inspect": "npm run migrate && node --inspect-brk `which adonis` seed",
+    "dump": "mysqldump -uroot -ppassword partymaker > database/partymaker.sql"
   },
   "keywords": [
     "partymaker"

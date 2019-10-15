@@ -19,11 +19,13 @@ class EntertainmentController {
    * @param {Request} ctx.request
    */
   async index() {
-    return Entertainment.query()
+    const entertainments = await Entertainment.query()
       .with('places', builder => builder.where({ is_active: true }))
       .where({ is_active: true })
       .orderBy('order')
       .fetch()
+
+    return entertainments.toJSON().map(e => ({ ...e, places: e.places.slice(0, 6) }))
   }
 
   /**
