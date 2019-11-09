@@ -10,20 +10,12 @@ const promiseSerial = require('promise-serial')
 const USERS = require('./users')
 const ENTERTAINMENTS = require('./entertainments')
 const PLACES = require('./places')
-const ROOMS = require('./rooms')
-const MESSAGES = require('./messages')
-const RATINGS = require('./ratings')
-const COMMENTS = require('./comments')
 const CONTACTS = require('./contacts')
 
 const Factory = use('Factory')
 const User = use('App/Models/User')
 const Entertainment = use('App/Models/Entertainment')
 const Place = use('App/Models/Place')
-const Room = use('App/Models/Room')
-const Message = use('App/Models/Message')
-const Rating = use('App/Models/Rating')
-const Comment = use('App/Models/Comment')
 const Contact = use('App/Models/Contact')
 
 function log(text) {
@@ -43,16 +35,6 @@ class Seeder {
     return Promise.all(PLACES.map(fields => Place.create(fields)))
   }
 
-  ratePlaces() {
-    log('rate places...')
-    return Promise.all(RATINGS.map(fields => Rating.create(fields)))
-  }
-
-  commentPlaces() {
-    log('comment places...')
-    return Promise.all(COMMENTS.map(fields => Comment.create(fields)))
-  }
-
   addContacts() {
     log('creating places contacts...')
     return Promise.all(CONTACTS.map(fields => Contact.create(fields)))
@@ -65,32 +47,12 @@ class Seeder {
     return [...defaultUsers, ...randomUsers]
   }
 
-  createRooms() {
-    log('creating rooms...')
-    return Promise.all(ROOMS.map(fields => Room.create(fields)))
-  }
-
-  addUsersToRoom(rooms, users) {
-    log('adding users to rooms...')
-    return Promise.all(rooms.map(room => room.users().attach(users.map(u => u.id))))
-  }
-
-  async createMessages() {
-    log('creating messages...')
-    await Promise.all(MESSAGES.map(fields => Message.create(fields)))
-  }
 
   async run() {
-    const users = await this.createUsers()
+    await this.createUsers()
     await this.createEntertainments()
     await this.createPlaces()
     await this.addContacts()
-    await this.ratePlaces()
-    await this.commentPlaces()
-    const rooms = await this.createRooms()
-    await this.addUsersToRoom(rooms, users)
-    await this.createMessages()
-
     return true
   }
 }

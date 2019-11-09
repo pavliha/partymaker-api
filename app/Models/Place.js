@@ -22,20 +22,8 @@ class Place extends Model {
     return this.belongsTo('App/Models/Entertainment')
   }
 
-  ratings() {
-    return this.hasMany('App/Models/Rating')
-  }
-
-  comments() {
-    return this.hasMany('App/Models/Comment')
-  }
-
   photos() {
     return this.hasMany('App/Models/Photo')
-  }
-
-  orders() {
-    return this.hasMany('App/Models/Order')
   }
 
   contacts() {

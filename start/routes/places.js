@@ -14,16 +14,6 @@ Route.resource('places', 'Place/PlaceController')
   .middleware(new Map([[['index', 'store', 'update', 'destroy'], ['auth']]]))
   .apiOnly()
 
-Route.resource('places.comments', 'Place/CommentController')
-  .validator([
-    ['places.comments.store', 'Place/Comment/Store'],
-    ['places.comments.update', 'Place/Comment/Update'],
-    ['places.comments.destroy', 'Place/Comment/Destroy'],
-  ])
-  .middleware(new Map([[['index', 'store', 'update', 'destroy'], ['auth']]]))
-  .apiOnly()
-
-
 Route.resource('places.photos', 'Place/PhotoController')
   .validator([
     ['places.photos.store', 'Place/Photo/Store'],
