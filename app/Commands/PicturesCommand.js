@@ -25,6 +25,7 @@ class PicturesCommand extends Command {
   }
 
   async _createThumbnails(fileNames) {
+    if (fileNames.length === 0) this.warn('All pictures have thumbnails')
     const promises = fileNames.map(fileName => ImageProcessor.createThumbnail(fileName))
     this.info('Creating thumbnails...')
     const thumbnails = await Promise.all(promises)
@@ -43,7 +44,6 @@ class PicturesCommand extends Command {
 
   async _resize(fileNames) {
     const withoutThumbnails = this._findWithoutThumbnail(fileNames)
-    if (withoutThumbnails.length === 0) this.warn('All pictures have thumbnails')
     const withoutSlides = this._findWithoutSlide(fileNames)
     await this._createThumbnails(withoutThumbnails)
     await this._createSlides(withoutSlides)
