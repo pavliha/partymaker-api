@@ -6,10 +6,10 @@ const Route = use('Route')
  *
  * */
 Route.get('/', 'SwaggerController.index')
-Route.post('/log', 'SwaggerController.log')
+Route.get('/log', 'SwaggerController.log')
 
 require('./auth')
 require('./users')
 require('./places')
 require('./entertainments')
-require('./asset')
+require('./uploads')

@@ -1,5 +1,5 @@
 module.exports = {
   formatCount: require('./formatCount'),
-  processFile: require('./processFile'),
-  processUrl: require('./processUrl')
+  processUrl: require('./processUrl'),
+  generateNameFromUrl: require('./generateNameFromUrl'),
 }

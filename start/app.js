@@ -32,7 +32,7 @@ const providers = [
   '@adonisjs/mail/providers/MailProvider',
   '@adonisjs/websocket/providers/WsProvider',
   '@adonisjs/drive/providers/DriveProvider',
-  local('Sms/providers/SmsProvider'),
+  local('SmsProvider'),
 ]
 
 /*
@@ -62,7 +62,7 @@ const aceProviders = [
 |
 */
 const aliases = {
-  Sms: 'Adonis/Addons/Sms'
+  Sms: 'App/Providers/Sms',
 }
 
 /*
@@ -73,6 +73,8 @@ const aliases = {
 | Here you store ace commands for your package
 |
 */
-const commands = []
+const commands = [
+  'App/Commands/PicturesCommand'
+]
 
 module.exports = { providers, aceProviders, aliases, commands }

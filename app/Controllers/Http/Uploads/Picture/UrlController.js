@@ -2,24 +2,20 @@
 
 const { basename } = require('path')
 const fs = require('fs')
+const { generateNameFromUrl } = require('../../../../../utils')
+const axios = require('axios')
 const Helpers = use('Helpers')
 const Asset = use('App/Models/Asset')
+const Drive = use('Drive')
 const unlink = Helpers.promisify(fs.unlink)
-const { processFile } = require('../../../../utils')
-
-/**
- @typedef {import('@adonisjs/framework/src/Request')} Request
- @typedef {import('@adonisjs/framework/src/Response')} Response
- @typedef {import('@adonisjs/framework/src/View')} View
- */
 
 /**
  * Resourceful controller for interacting with assets
  */
-class AssetController {
+class UrlController {
   /**
    * Show a list of all assets.
-   * GET assets
+   * GET assets/url
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -33,18 +29,21 @@ class AssetController {
 
   /**
    * Create/save a new asset.
-   * POST assets
+   * POST assets/url
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async store({ request, response, auth }) {
-    const fileName = await processFile(request)
-
+    const { url, title } = request.all()
+    const fileName = generateNameFromUrl(url)
+    const file = await axios.get(url, { responseType: 'arraybuffer' })
+    const buffer = Buffer.from(file.data, 'base64')
+    await Drive.put(fileName, buffer)
     const asset = await Asset.create({
       admin_id: auth.user.id,
-      title: request.input('title'),
+      title,
       url: `/uploads/${fileName}`
     })
 
@@ -53,26 +52,26 @@ class AssetController {
 
   /**
    * Display a single asset.
-   * GET assets/:id
+   * GET assets/url/:id
    *
    * @param {object} ctx
    */
   async show({ params }) {
-    return Asset.findOrFail(params.id)
+    return Asset.findByOrFail({ url: params.url })
   }
 
   /**
    * Delete a asset with id.
-   * DELETE assets/:id
+   * DELETE assets/url/:id
    *
    * @param {object} ctx
    * @param {Response} ctx.response
    */
-  async destroy({ asset, response }) {
+  async destroy({ response, asset }) {
     await unlink(Helpers.publicPath(`uploads/${basename(asset.url)}`))
     await asset.delete()
     return response.deleted('Asset was deleted successfully!')
   }
 }
 
-module.exports = AssetController
+module.exports = UrlController
