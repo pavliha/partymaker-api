@@ -33,6 +33,7 @@ const providers = [
   '@adonisjs/websocket/providers/WsProvider',
   '@adonisjs/drive/providers/DriveProvider',
   local('SmsProvider'),
+  local('ImageProcessorProvider'),
 ]
 
 /*
@@ -63,6 +64,7 @@ const aceProviders = [
 */
 const aliases = {
   Sms: 'App/Providers/Sms',
+  ImageProcessor: 'App/Providers/ImageProcessor'
 }
 
 /*
