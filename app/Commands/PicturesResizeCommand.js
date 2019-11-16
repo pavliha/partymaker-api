@@ -5,7 +5,7 @@ const readdir = util.promisify(fs.readdir)
 const Helpers = use('Helpers')
 const ImageProcessor = use('ImageProcessor')
 
-class PicturesCommand extends Command {
+class PicturesResizeCommand extends Command {
 
   static get signature() {
     return 'pictures:resize'
@@ -15,38 +15,39 @@ class PicturesCommand extends Command {
     return 'Create thumbnails and slides for uploaded pictures'
   }
 
-  _findWithoutThumbnail(fileNames) {
-    return fileNames.filter(fileName => !fileName.includes('thumbnail.'))
+  _findOriginals(fileNames) {
+    return fileNames.filter(fileName => {
+      const isThumbnail = fileName.includes('thumbnail.')
+      const isSlide = fileName.includes('slide.')
+      return !(isThumbnail || isSlide)
+    })
   }
 
-  _findWithoutSlide(fileNames) {
-    if (fileNames.length === 0) this.warn('All pictures have thumbnails')
-    return fileNames.filter(fileName => !fileName.includes('slide.'))
+  _displayCreatedCount(created, label) {
+    const countCreated = created.filter(isCreated => isCreated)
+    return countCreated < 1
+      ? this.warn(`All pictures have ${label}`)
+      : this.success(`Created ${countCreated.length} ${label}`)
   }
 
   async _createThumbnails(fileNames) {
-    if (fileNames.length === 0) this.warn('All pictures have thumbnails')
     const promises = fileNames.map(fileName => ImageProcessor.createThumbnail(fileName))
     this.info('Creating thumbnails...')
-    const thumbnails = await Promise.all(promises)
-    this.success(`Created ${fileNames.length} thumbnails`)
-    return thumbnails
+    const created = await Promise.all(promises)
+    return this._displayCreatedCount(created, 'thumbnails')
   }
 
   async _createSlides(fileNames) {
-    if (fileNames.length === 0) this.warn('All pictures have slides')
     const promises = fileNames.map(fileName => ImageProcessor.createSlide(fileName))
     this.info('Creating slides...')
-    const thumbnails = await Promise.all(promises)
-    this.success(`Created ${fileNames.length} slides`)
-    return thumbnails
+    const created = await Promise.all(promises)
+    return this._displayCreatedCount(created, 'slides')
   }
 
   async _resize(fileNames) {
-    const withoutThumbnails = this._findWithoutThumbnail(fileNames)
-    const withoutSlides = this._findWithoutSlide(fileNames)
-    await this._createThumbnails(withoutThumbnails)
-    await this._createSlides(withoutSlides)
+    const originals = this._findOriginals(fileNames)
+    await this._createThumbnails(originals)
+    await this._createSlides(originals)
   }
 
   _findPictures(fileNames) {
@@ -62,4 +63,4 @@ class PicturesCommand extends Command {
   }
 }
 
-module.exports = PicturesCommand
+module.exports = PicturesResizeCommand

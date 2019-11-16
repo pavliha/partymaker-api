@@ -10,17 +10,19 @@ class ImageProcessor {
   }
 
   async createSlide(fileName) {
-    const pictureStream = await this.Drive.getStream(fileName)
-    const thumbnailName = utils.appendFileNameSuffix(fileName, '-slide')
+    const stream = await this.Drive.getStream(fileName)
+    const name = utils.appendFileNameSuffix(fileName, '-slide')
+    if (await this.Drive.exists(name)) return false
     const transform = sharp().resize({ height: 250 }).withMetadata()
-    return this.Drive.put(thumbnailName, pictureStream.pipe(transform))
+    return this.Drive.put(name, stream.pipe(transform))
   }
 
   async createThumbnail(fileName) {
-    const pictureStream = await this.Drive.getStream(fileName)
-    const thumbnailName = utils.appendFileNameSuffix(fileName, '-thumbnail')
+    const stream = await this.Drive.getStream(fileName)
+    const name = utils.appendFileNameSuffix(fileName, '-thumbnail')
+    if (await this.Drive.exists(name)) return false
     const transform = sharp().resize({ width: 150, height: 150 }).withMetadata()
-    return this.Drive.put(thumbnailName, pictureStream.pipe(transform))
+    return this.Drive.put(name, stream.pipe(transform))
   }
 
 }
