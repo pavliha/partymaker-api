@@ -49,11 +49,15 @@ class PicturesCommand extends Command {
     await this._createSlides(withoutSlides)
   }
 
+  _findPictures(fileNames) {
+    return fileNames.filter(fileName => fileName.toLowerCase().match(/.(jpg|jpeg|png)$/i))
+  }
+
   async handle(args, options) {
     this.info('Reading files from uploads folder')
     const uploadsPath = Helpers.publicPath('uploads/')
     const fileNames = await readdir(uploadsPath)
-    await this._resize(fileNames)
+    await this._resize(this._findPictures(fileNames))
     return this.success(`Processed ${fileNames.length} original pictures`)
   }
 }

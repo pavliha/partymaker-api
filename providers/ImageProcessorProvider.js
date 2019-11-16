@@ -10,7 +10,6 @@ class ImageProcessor {
   }
 
   async createSlide(fileName) {
-    console.log('slide', fileName)
     const pictureStream = await this.Drive.getStream(fileName)
     const thumbnailName = utils.appendFileNameSuffix(fileName, '-slide')
     const transform = sharp().resize({ height: 250 }).withMetadata()
@@ -18,7 +17,6 @@ class ImageProcessor {
   }
 
   async createThumbnail(fileName) {
-    console.log('thumbnail', fileName)
     const pictureStream = await this.Drive.getStream(fileName)
     const thumbnailName = utils.appendFileNameSuffix(fileName, '-thumbnail')
     const transform = sharp().resize({ width: 150, height: 150 }).withMetadata()
