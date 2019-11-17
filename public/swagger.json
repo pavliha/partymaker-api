@@ -2223,6 +2223,49 @@
         }
       }
     },
+    "/uploads": {
+      "delete": {
+        "tags": [
+          "uploads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "delete uploaded file",
+        "operationId": "upload-delete",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "filename",
+            "type": "string",
+            "description": "file name to delete",
+            "default": "image.png"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/uploads/picture/url": {
       "post": {
         "tags": [
