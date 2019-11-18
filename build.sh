@@ -14,5 +14,4 @@ echo 'Restart nginx service'
 sudo service nginx restart
 
 echo 'Restart pm2'
-npm install -g pm2
-pm2 restart server.js
+/home/dev/.npm-global/bin/pm2 restart server.js
