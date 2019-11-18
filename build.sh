@@ -2,4 +2,4 @@
 git reset --hard origin/master
 git pull origin master
 yarn install
-pm2 restart server
+pm2 restart server.js
