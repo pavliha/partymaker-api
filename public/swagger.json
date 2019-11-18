@@ -2223,7 +2223,7 @@
         }
       }
     },
-    "/uploads": {
+    "/uploads/{filename}": {
       "delete": {
         "tags": [
           "uploads"
@@ -2243,11 +2243,12 @@
         ],
         "parameters": [
           {
-            "in": "query",
+            "in": "path",
             "name": "filename",
             "type": "string",
             "description": "file name to delete",
-            "default": "image.png"
+            "default": "image.png",
+            "required": true
           }
         ],
         "responses": {
