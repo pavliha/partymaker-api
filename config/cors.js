@@ -16,12 +16,7 @@ module.exports = {
   | Function - Receives the current origin and should return one of the above values.
   |
   */
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:2000',
-    'https://partymaker.zp.ua',
-    'https://admin.partymaker.zp.ua'
-  ],
+  origin: true,
 
   /*
   |--------------------------------------------------------------------------
