@@ -21,21 +21,7 @@
 <script src="https://unpkg.com/@adonisjs/websocket-client"></script>
 
 <script>
-
-
   window.onload = function () {
-
-    const ws = adonis.Ws('ws://localhost:3333')
-
-    ws.withApiToken(localStorage.getItem('token')).connect()
-
-    ws.on('error', (error) => {
-      console.error(error)
-    })
-
-    ws.subscribe('room:*')
-
-
     // Build a system
     window.ui = SwaggerUIBundle({
       url: '/swagger.json',
