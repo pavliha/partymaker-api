@@ -1,4 +1,4 @@
-'use strict'
+const { basename } = require('path')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
@@ -11,11 +11,11 @@ class Place extends Model {
   }
 
   setPictureUrl(url) {
-    return url.replace(Env.get('APP_URL'), '')
+    return basename(url)
   }
 
   getPictureUrl(url) {
-    return `${Env.get('APP_URL')}${url}`
+    return `${Env.get('APP_URL')}/uploads/${url}`
   }
 
   entertainment() {
