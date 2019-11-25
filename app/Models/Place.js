@@ -22,6 +22,10 @@ class Place extends Model {
     return this.belongsTo('App/Models/Entertainment')
   }
 
+  requirements() {
+    return this.hasMany('App/Models/Requirements')
+  }
+
   photos() {
     return this.hasMany('App/Models/Photo')
   }

@@ -32,6 +32,7 @@ const providers = [
   '@adonisjs/mail/providers/MailProvider',
   '@adonisjs/websocket/providers/WsProvider',
   '@adonisjs/drive/providers/DriveProvider',
+  'adonis-bumblebee/providers/BumblebeeProvider',
   local('SmsProvider'),
   local('ImageProcessorProvider'),
 ]
@@ -48,6 +49,7 @@ const providers = [
 const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
   '@adonisjs/vow/providers/VowProvider',
+  'adonis-bumblebee/providers/CommandsProvider'
 ]
 
 /*

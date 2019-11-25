@@ -25,11 +25,21 @@ module.exports = class Store {
       title: 'required|string',
       picture_url: 'string',
       price: 'string',
-      age: 'number',
-      players_min: 'number',
-      players_max: 'number',
       working_hours: 'string',
-      entertainment_id: 'required|number'
+      entertainment_id: 'required|number',
+      photos: 'array',
+      'requirements.min_order_amount': 'number',
+      'requirements.min_age': 'number',
+      'requirements.max_age': 'number',
+      'requirements.players_min': 'number',
+      'requirements.players_max': 'number',
+      'contacts.website_url': 'url',
+      'contacts.address': 'string',
+      'contacts.directions': 'string',
+      'contacts.instagram_url': 'url',
+      'contacts.email': 'email',
+      'contacts.map_url': 'url',
+      'contacts.phone': 'string',
     }
   }
 

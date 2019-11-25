@@ -1,6 +1,6 @@
 'use strict'
 
-const Asset = use('App/Models/Asset')
+const Drive = use('Drive')
 const Place = use('App/Models/Place')
 
 /**
@@ -31,9 +31,13 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async store({ request, response }) {
-    const fields = request.all()
-    const place = await Place.create(fields)
-    return response.created(place)
+    const { requirements, contacts, photos, ...form } = request.all()
+    const place = await Place.create(form)
+    if (requirements) await place.requirements().create(requirements)
+    if (contacts) await place.contacts().create(contacts)
+    if (photos) await place.photos().createMany(photos)
+    const createdPlace = this.show({ params: { id: place.id } })
+    return response.created(createdPlace)
   }
 
   /**
@@ -45,6 +49,7 @@ class PlaceController {
   async show({ params }) {
     return Place
       .query()
+      .with('requirements')
       .with('photos')
       .with('contacts')
       .with('entertainment')
@@ -75,9 +80,8 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async destroy({ place, response }) {
-    const asset = await Asset.findBy({ url: place.picture_url })
-    if (asset) asset.delete()
     await place.delete()
+    Drive.delete(place.picture_url)
     return response.deleted()
   }
 }

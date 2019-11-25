@@ -1,2772 +1,913 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "This is Partymaker server.",
-    "version": "1.0.0",
-    "title": "Swagger Partymaker",
-    "contact": {
-      "email": "kostyuk.pavel.09@gmail.com"
-    }
-  },
-  "basePath": "/",
+  "openapi": "3.0.0",
+  "info": {"version": "1.0.0", "title": "Partymaker API"},
   "tags": [
-    {
-      "name": "auth",
-      "description": "User authentication"
-    },
-    {
-      "name": "user",
-      "description": "get user"
-    },
-    {
-      "name": "users",
-      "description": "Users"
-    },
-    {
-      "name": "entertainments",
-      "description": "entertainments"
-    },
-    {
-      "name": "places",
-      "description": "places"
-    },
-    {
-      "name": "contacts",
-      "description": "contacts"
-    },
-    {
-      "name": "photos",
-      "description": "photos"
-    },
-    {
-      "name": "uploads",
-      "description": "uploads"
-    }
-  ],
-  "securityDefinitions": {
-    "bearer": {
-      "type": "apiKey",
-      "in": "header",
-      "name": "Authorization"
-    }
-  },
-  "schemes": [
-    "http",
-    "https"
+    {"name": "auth", "description": "User authentication"},
+    {"name": "user", "description": "get user"},
+    {"name": "entertainments", "description": "entertainments"},
+    {"name": "places", "description": "places"},
+    {"name": "uploads", "description": "uploads"}
   ],
   "paths": {
     "/auth/login": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Login user",
-        "operationId": "login",
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "formData",
-            "name": "email",
-            "required": true,
-            "type": "string",
-            "format": "email",
-            "default": "regular@mailinator.com"
-          },
-          {
-            "in": "formData",
-            "name": "password",
-            "required": true,
-            "type": "string",
-            "format": "password",
-            "default": "qwerty123"
+        "requestBody": {
+          "description": "Login user using credentials",
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "kostyk.pavel.09@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123",
+                    "format": "password"
+                  }
+                }
+              }
+            }
           }
-        ],
+        },
         "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "bearer"
-                },
-                "token": {
-                  "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjExLCJkYXRhIjp7Im5hbWUiOiLQn9Cw0LLQtdC7IN..."
-                },
-                "refreshToken": {
-                  "type": "string",
-                  "example": "f24faf2f153a36db2809505cad9c4e5b9ZcsMbB8nwUSkJmyvOjzktu5b9ZcsMbB8nwUSkJmyvOjzktu..."
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/responses/ValidationError"
-          }
-        }
-      }
-    },
-    "/auth/social": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "Login user using google or facebook",
-        "operationId": "login-social",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "required": [
-                "name",
-                "email",
-                "provider_id"
-              ],
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "Павел Костюк"
-                },
-                "email": {
-                  "type": "string",
-                  "example": "kostyk.pavel.09@gmail.com"
-                },
-                "avatar_url": {
-                  "type": "string",
-                  "example": "https://lh5.googleusercontent.com/-CMSrZzpBle0/AAAAAAAAAAI/AAAAAAAAAGY/fg4fG1dIPr4/s96-c/photo.jpg"
-                },
-                "provider": {
-                  "type": "string",
-                  "example": "google",
-                  "enum": [
-                    "facebook",
-                    "google"
-                  ]
-                },
-                "provider_id": {
-                  "type": "string",
-                  "example": "117091234537766205437"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "bearer"
-                },
-                "token": {
-                  "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjExLCJkYXRhIjp7Im5hbWUiOiLQn9Cw0LLQtdC7IN..."
-                },
-                "refreshToken": {
-                  "type": "string",
-                  "example": "f24faf2f153a36db2809505cad9c4e5b9ZcsMbB8nwUSkJmyvOjzktu5b9ZcsMbB8nwUSkJmyvOjzktu..."
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/responses/ValidationError"
-          }
+          "200": {"$ref": "#/components/responses/Authorized"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/auth/register": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "Register user",
-        "operationId": "register",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "required": [
-                "name",
-                "email",
-                "password",
-                "phone"
-              ],
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "Pavel Kostyuk"
-                },
-                "email": {
-                  "type": "string",
-                  "example": "pavliha@mailinator.com"
-                },
-                "password": {
-                  "type": "string",
-                  "example": "qwerty123"
-                },
-                "phone": {
-                  "type": "string",
-                  "example": "+380683188524"
+        "requestBody": {
+          "description": "Register user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Pavel Kostyuk",
+                    "required": true
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "pavliha@mailinator.com",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123",
+                    "required": true
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "+380683188524"
+                  }
                 }
               }
             }
           }
-        ],
+        },
         "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "bearer"
-                },
-                "token": {
-                  "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjExLCJkYXRhIjp7Im5hbWUiOiLQn9Cw0LLQtdC7IN..."
-                },
-                "refreshToken": {
-                  "type": "string",
-                  "example": "f24faf2f153a36db2809505cad9c4e5b9ZcsMbB8nwUSkJmyvOjzktu5b9ZcsMbB8nwUSkJmyvOjzktu..."
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/responses/ValidationError"
-          }
+          "200": {"$ref": "#/components/responses/Authorized"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/auth/activate/{hash}": {
       "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "current user",
-        "operationId": "auth-activate",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["auth"],
+        "summary": "Activate user",
         "parameters": [
           {
             "in": "path",
             "name": "hash",
             "description": "hash from link",
-            "required": true,
-            "type": "string"
+            "required": true
           }
         ],
         "responses": {
-          "202": {
-            "description": "Accepted"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          }
+          "202": {"description": "Accepted"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/auth/password/forgot": {
       "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "send email with reset link",
-        "operationId": "auth-forgot",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "This will send email to user with reset link",
-            "required": true,
-            "schema": {
-              "required": [
-                "email"
-              ],
-              "properties": {
-                "email": {
-                  "type": "string",
-                  "example": "kostyk.pavel.09@gmail.com"
+        "tags": ["auth"],
+        "summary": "Send email with activation link",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "pavliha@mailinator.com",
+                    "required": true
+                  }
                 }
               }
             }
           }
-        ],
+        },
         "responses": {
-          "202": {
-            "description": "Accepted"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          }
+          "202": {"description": "Accepted"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/auth/password/reset/{token}": {
       "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "reset password with token from email",
-        "operationId": "auth-reset",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["auth"],
+        "summary": "Reset password with token from email",
         "parameters": [
           {
             "in": "path",
             "name": "token",
-            "type": "string",
+            "description": "token from email",
             "required": true
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "This will set a new password for user",
-            "required": true,
-            "schema": {
-              "required": [
-                "password",
-                "password_repeat"
-              ],
-              "properties": {
-                "password": {
-                  "type": "string",
-                  "example": "qwerty123"
-                },
-                "password_repeat": {
-                  "type": "string",
-                  "example": "qwerty123"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123"
+                  },
+                  "password_confirmation": {
+                    "type": "string",
+                    "example": "qwerty123"
+                  }
                 }
               }
             }
           }
-        ],
+        },
         "responses": {
-          "202": {
-            "description": "Accepted"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          }
+          "202": {"$ref": "#/components/responses/Authorized"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/auth/user": {
       "get": {
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "current user",
-        "operationId": "auth",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["user"],
+        "summary": "Get authenticated user",
+        "security": [{"bearerAuth": []}],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/User"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "update current user",
-        "operationId": "auth-update-user",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "Павел Костюк"
-                },
-                "avatar_url": {
-                  "type": "string",
-                  "example": "https://lh5.googleusercontent.com/-CMSrZzpBle0/AAAAAAAAAAI/AAAAAAAAAGY/fg4fG1dIPr4/s96-c/photo.jpg"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/User"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          }
-        }
-      }
-    },
-    "/auth/user/socials": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "current user socials",
-        "operationId": "auth-user-socials",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Social"
+            "description": "Authenticated user",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/User"}
               }
             }
           },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          }
-        }
-      }
-    },
-    "/users": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "List of all users",
-        "operationId": "user-list",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "type": "number"
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "type": "number"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "total": {
-                  "type": "number",
-                  "example": 23
-                },
-                "perPage": {
-                  "type": "number",
-                  "example": 10
-                },
-                "page": {
-                  "type": "number",
-                  "example": 1
-                },
-                "lastPage": {
-                  "type": "number",
-                  "example": 3
-                },
-                "data": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/User"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Create new user",
-        "operationId": "user-create",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Show user",
-        "operationId": "user-show",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "ID of user",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Update user",
-        "operationId": "user-update",
-        "consumes": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "ID of user",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Delete user - superadmin only",
-        "operationId": "user-delete",
-        "consumes": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of user",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "OK"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          }
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/entertainments": {
       "get": {
-        "tags": [
-          "entertainments"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get entertainments",
-        "operationId": "entertainments",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "type": "integer",
-            "format": "int64",
-            "default": 0
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "type": "integer",
-            "format": "int64",
-            "default": 20
-          }
-        ],
+        "summary": "List of entertainments",
+        "tags": ["entertainments"],
         "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Entertainment"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "200": {"$ref": "#/components/responses/Entertainment-extended"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       },
       "post": {
-        "tags": [
-          "entertainments"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "new entertainment",
-        "operationId": "create-entertainment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Create new entertainment",
-            "required": true,
-            "schema": {
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "Клуб “Blok-Post”"
-                },
-                "order": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 1
-                }
-              }
+        "tags": ["entertainments"],
+        "summary": "Create new entertainment",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/Entertainment"}
             }
           }
-        ],
+        },
         "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Entertainment"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "201": {"$ref": "#/components/responses/Entertainment-extended"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/entertainments/{id}": {
       "get": {
-        "tags": [
-          "entertainments"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get entertainment",
-        "operationId": "entertainment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["entertainments"],
+        "summary": "Get entertainment",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
+          {"$ref": "#/components/parameters/id"}
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Entertainment"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "200": {"$ref": "#/components/responses/Entertainment-extended"},
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       },
       "put": {
-        "tags": [
-          "entertainments"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "update entertainment",
-        "operationId": "update-entertainment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["entertainments"],
+        "security": [{"bearerAuth": []}],
+        "summary": "Update entertainment",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Update complete entertainment",
-            "required": true,
-            "schema": {
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "Клуб “Blok-Post”"
-                },
-                "picture_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua/wp-content/uploads/2018/06/cropped-Club-Block-Post..jpg"
-                },
-                "working_hours": {
-                  "type": "string",
-                  "example": "ежедневно с 7:00 до 19:00"
-                },
-                "price": {
-                  "type": "string",
-                  "example": "от 300 грн/чел"
-                },
-                "map_url": {
-                  "type": "string",
-                  "example": "https://www.google.com/maps/entertainment/Klub+%22Blok-Post%22+Peyntbol,Lazertag,TIR,Arenda+besedok./@47.7976408,35.167646,15z/data=!4m2!3m1!1s0x0:0xd3cabe72da827682?sa=X&ved=2ahUKEwjKjq-YyPrjAhWtwqYKHePkAQQQ_BIwCnoECAoQCA"
-                },
-                "website_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua"
-                },
-                "phone": {
-                  "type": "string",
-                  "example": "+380961039348"
-                },
-                "entertainment_id": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 1
-                }
-              }
+          {"$ref": "#/components/parameters/id"}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/Entertainment"}
             }
           }
-        ],
+        },
         "responses": {
-          "202": {
-            "description": "Updated",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Entertainment"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "entertainments"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "modify entertainment",
-        "operationId": "modify-entertainment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Modify entertainment",
-            "required": true,
-            "schema": {
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "Сыграть в пейнтбол"
-                },
-                "order": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 1
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Updated",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Entertainment"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "entertainments"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "delete entertainment",
-        "operationId": "delete-entertainment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "201": {"$ref": "#/components/responses/Entertainment-extended"},
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/places": {
       "get": {
-        "tags": [
-          "places"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get places",
-        "operationId": "places",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "type": "integer",
-            "format": "int64",
-            "default": 0
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "type": "integer",
-            "format": "int64",
-            "default": 20
-          }
-        ],
+        "summary": "List of places",
+        "tags": ["places"],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Place"
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/Place"}
               }
             }
           },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       },
       "post": {
-        "tags": [
-          "places"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "new place",
-        "operationId": "create-place",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Create new place",
-            "required": true,
-            "schema": {
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "Клуб “Blok-Post”"
-                },
-                "picture_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua/wp-content/uploads/2018/06/cropped-Club-Block-Post..jpg"
-                },
-                "working_hours": {
-                  "type": "string",
-                  "example": "ежедневно с 7:00 до 19:00"
-                },
-                "price": {
-                  "type": "string",
-                  "example": "от 300 грн/чел"
-                },
-                "map_url": {
-                  "type": "string",
-                  "example": "https://www.google.com/maps/place/Klub+%22Blok-Post%22+Peyntbol,Lazertag,TIR,Arenda+besedok./@47.7976408,35.167646,15z/data=!4m2!3m1!1s0x0:0xd3cabe72da827682?sa=X&ved=2ahUKEwjKjq-YyPrjAhWtwqYKHePkAQQQ_BIwCnoECAoQCA"
-                },
-                "website_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua"
-                },
-                "phone": {
-                  "type": "string",
-                  "example": "+380961039348"
-                },
-                "entertainment_id": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 1
-                }
-              }
+        "tags": ["places"],
+        "security": [{"bearerAuth": []}],
+        "summary": "Create new place",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/Place"}
             }
           }
-        ],
+        },
         "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Place"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "201": {"$ref": "#/components/responses/Place-extended"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/places/{id}": {
       "get": {
-        "tags": [
-          "places"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get place",
-        "operationId": "place",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["places"],
+        "summary": "Get place",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
+          {"$ref": "#/components/parameters/id"}
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Place"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "200": {"$ref": "#/components/responses/Place-extended"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       },
       "put": {
-        "tags": [
-          "places"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "update place",
-        "operationId": "update-place",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["places"],
+        "summary": "Update place",
+        "security": [{"bearerAuth": []}],
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Update complete place",
-            "required": true,
-            "schema": {
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "Клуб “Blok-Post”"
-                },
-                "picture_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua/wp-content/uploads/2018/06/cropped-Club-Block-Post..jpg"
-                },
-                "working_hours": {
-                  "type": "string",
-                  "example": "ежедневно с 7:00 до 19:00"
-                },
-                "price": {
-                  "type": "string",
-                  "example": "от 300 грн/чел"
-                },
-                "map_url": {
-                  "type": "string",
-                  "example": "https://www.google.com/maps/place/Klub+%22Blok-Post%22+Peyntbol,Lazertag,TIR,Arenda+besedok./@47.7976408,35.167646,15z/data=!4m2!3m1!1s0x0:0xd3cabe72da827682?sa=X&ved=2ahUKEwjKjq-YyPrjAhWtwqYKHePkAQQQ_BIwCnoECAoQCA"
-                },
-                "website_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua"
-                },
-                "phone": {
-                  "type": "string",
-                  "example": "+380961039348"
-                },
-                "entertainment_id": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 1
-                }
-              }
+          {"$ref": "#/components/parameters/id"}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/Place"}
             }
           }
-        ],
+        },
         "responses": {
-          "202": {
-            "description": "Updated",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Place"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "places"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "modify place",
-        "operationId": "modify-place",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Modify place",
-            "required": true,
-            "schema": {
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "Клуб “Blok-Post”"
-                },
-                "picture_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua/wp-content/uploads/2018/06/cropped-Club-Block-Post..jpg"
-                },
-                "working_hours": {
-                  "type": "string",
-                  "example": "ежедневно с 7:00 до 19:00"
-                },
-                "price": {
-                  "type": "string",
-                  "example": "от 300 грн/чел"
-                },
-                "map_url": {
-                  "type": "string",
-                  "example": "https://www.google.com/maps/place/Klub+%22Blok-Post%22+Peyntbol,Lazertag,TIR,Arenda+besedok./@47.7976408,35.167646,15z/data=!4m2!3m1!1s0x0:0xd3cabe72da827682?sa=X&ved=2ahUKEwjKjq-YyPrjAhWtwqYKHePkAQQQ_BIwCnoECAoQCA"
-                },
-                "website_url": {
-                  "type": "string",
-                  "example": "http://www.laser-tag.zp.ua"
-                },
-                "phone": {
-                  "type": "string",
-                  "example": "+380961039348"
-                },
-                "entertainment_id": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 1
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Updated",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Place"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "places"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "delete place",
-        "operationId": "delete-place",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/places/{places_id}/photos": {
-      "get": {
-        "tags": [
-          "photos"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get photos",
-        "operationId": "photos",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "type": "integer",
-            "format": "int64",
-            "default": 0
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "type": "integer",
-            "format": "int64",
-            "default": 20
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Photo"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "photos"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "new photo",
-        "operationId": "create-photo",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Create new photo",
-            "required": true,
-            "schema": {
-              "properties": {
-                "url": {
-                  "type": "string",
-                  "example": "https://place.com/pucture.jpg"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Photo"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/places/{places_id}/photos/{id}": {
-      "get": {
-        "tags": [
-          "photos"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get photo",
-        "operationId": "photo",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Photo"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "photos"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "modify photo",
-        "operationId": "modify-photo",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Modify photo",
-            "required": true,
-            "schema": {
-              "properties": {
-                "url": {
-                  "type": "string",
-                  "example": "https://place.com/pucture.jpg"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Updated",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Сomment"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "photos"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "delete photo",
-        "operationId": "delete-photo",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/places/{places_id}/contacts": {
-      "get": {
-        "tags": [
-          "contacts"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get contacts",
-        "operationId": "contacts",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "type": "integer",
-            "format": "int64",
-            "default": 0
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "type": "integer",
-            "format": "int64",
-            "default": 20
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Contact"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "contacts"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "new contact",
-        "operationId": "create-contact",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Create new contact",
-            "required": true,
-            "schema": {
-              "properties": {
-                "phone": {
-                  "type": "string",
-                  "example": "+380957791945"
-                },
-                "address": {
-                  "type": "string",
-                  "example": "ул. Седова, 36"
-                },
-                "map_url": {
-                  "type": "string",
-                  "example": "https://www.google.com.ua/maps/place/%D0%9A%D0%BB%D1%83%D0%B1+%22%D0%9E%D1%81%D1%82%D1%80%D0%BE%D0%B2+%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9%22,+%D0%BB%D0%B0%D0%B7%D0%B5%D1%80%D1%82%D0%B0%D0%B3,+%D0%BF%D0%B5%D0%B9%D0%BD%D1%82%D0%B1%D0%BE%D0%BB,+%D0%BB%D1%83%D1%87%D0%BD%D1%8B%D0%B9+%D1%82%D0%B8%D1%80/@47.8527247,35.1428418,17z/data=!4m13!1m7!3m6!1s0x40dc673c46bdaf25:0x18b329921db7a8b6!2z0YPQuy4g0KHQtdC00L7QstCwLCAzNiwg0JfQsNC_0L7RgNC-0LbRjNC1LCDQl9Cw0L_QvtGA0L7QttGB0LrQsNGPINC-0LHQu9Cw0YHRgtGMLCA2OTAwMA!3b1!8m2!3d47.8527247!4d35.1429276!3m4!1s0x0:0x96f47db488b09185!8m2!3d47.8521155!4d35.1429006?hl=ru"
-                },
-                "website_url": {
-                  "type": "string",
-                  "example": "https://www.ostrovclub.zp.ua/"
-                },
-                "email": {
-                  "type": "string",
-                  "example": "example@email.com"
-                },
-                "instagram_url": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Contact"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/places/{places_id}/contacts/{id}": {
-      "get": {
-        "tags": [
-          "contacts"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "get contact",
-        "operationId": "contact",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Contact"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "contacts"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "modify contact",
-        "operationId": "modify-contact",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Modify contact",
-            "required": true,
-            "schema": {
-              "properties": {
-                "phone": {
-                  "type": "string",
-                  "example": "+380957791945"
-                },
-                "address": {
-                  "type": "string",
-                  "example": "ул. Седова, 36"
-                },
-                "map_url": {
-                  "type": "string",
-                  "example": "https://www.google.com.ua/maps/place/%D0%9A%D0%BB%D1%83%D0%B1+%22%D0%9E%D1%81%D1%82%D1%80%D0%BE%D0%B2+%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9%22,+%D0%BB%D0%B0%D0%B7%D0%B5%D1%80%D1%82%D0%B0%D0%B3,+%D0%BF%D0%B5%D0%B9%D0%BD%D1%82%D0%B1%D0%BE%D0%BB,+%D0%BB%D1%83%D1%87%D0%BD%D1%8B%D0%B9+%D1%82%D0%B8%D1%80/@47.8527247,35.1428418,17z/data=!4m13!1m7!3m6!1s0x40dc673c46bdaf25:0x18b329921db7a8b6!2z0YPQuy4g0KHQtdC00L7QstCwLCAzNiwg0JfQsNC_0L7RgNC-0LbRjNC1LCDQl9Cw0L_QvtGA0L7QttGB0LrQsNGPINC-0LHQu9Cw0YHRgtGMLCA2OTAwMA!3b1!8m2!3d47.8527247!4d35.1429276!3m4!1s0x0:0x96f47db488b09185!8m2!3d47.8521155!4d35.1429006?hl=ru"
-                },
-                "website_url": {
-                  "type": "string",
-                  "example": "https://www.ostrovclub.zp.ua/"
-                },
-                "email": {
-                  "type": "string",
-                  "example": "example@email.com"
-                },
-                "instagram_url": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Updated",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/Contact"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "contacts"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "delete contact",
-        "operationId": "delete-contact",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "places_id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "type": "integer",
-            "format": "int64",
-            "required": true,
-            "default": 1
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/uploads/{filename}": {
-      "delete": {
-        "tags": [
-          "uploads"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "delete uploaded file",
-        "operationId": "upload-delete",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "filename",
-            "type": "string",
-            "description": "file name to delete",
-            "default": "image.png",
-            "required": true
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted"
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/uploads/picture/url": {
-      "post": {
-        "tags": [
-          "uploads"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "upload picture using url",
-        "operationId": "upload-picture-url",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "type",
-            "type": "string",
-            "description": "thumbnail or slide",
-            "default": "thumbnail"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Upload url",
-            "required": true,
-            "schema": {
-              "properties": {
-                "url": {
-                  "type": "string",
-                  "example": "https://example.com/picture.jpg"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Upload"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
+          "201": {"$ref": "#/components/responses/Place-extended"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     },
     "/uploads/picture/file": {
       "post": {
-        "tags": [
-          "uploads"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "upload picture using form data",
-        "operationId": "upload-picture-file",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["uploads"],
+        "summary": "Upload picture from the computer",
+        "security": [{"bearerAuth": []}],
         "parameters": [
           {
             "in": "query",
             "name": "type",
-            "type": "string",
             "description": "thumbnail or slide",
-            "default": "thumbnail"
-          },
-          {
-            "in": "formData",
-            "name": "file",
-            "type": "file",
-            "description": "Upload file using form data"
+            "schema": {
+              "type": "string",
+              "default": "thumbnail"
+            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Upload"
+          "202": {
+            "description": "Accepted", "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Upload"
+                }
+              }
             }
           },
-          "401": {
-            "$ref": "#/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "402": {"$ref": "#/components/responses/Unauthorized"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      }
+    },
+    "/uploads/picture/url": {
+      "post": {
+        "tags": ["uploads"],
+        "summary": "Upload picture from url",
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "description": "thumbnail or slide",
+            "schema": {
+              "type": "string",
+              "default": "thumbnail"
+            }
           }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "example": "https://example.com/picture.jpg"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted", "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Upload"
+                }
+              }
+            }
+          },
+          "402": {"$ref": "#/components/responses/Unauthorized"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
     }
   },
-  "responses": {
-    "ValidationError": {
-      "schema": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "messsage": {
-              "type": "string",
-              "example": "required validation failed"
-            },
-            "field": {
-              "type": "string",
-              "example": "email"
-            },
-            "validation": {
-              "type": "string",
-              "example": "required"
-            }
-          }
-        }
-      },
-      "description": "Validation error"
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     },
-    "NotFound": {
-      "schema": {
-        "type": "object",
-        "description": "Not Found",
-        "properties": {
-          "status": {
-            "type": "number",
-            "example": 404,
-            "default": true
-          },
-          "error": {
-            "type": "string",
-            "example": "Not Found",
-            "default": true
-          },
-          "message": {
-            "type": "string",
-            "example": "Does not exist!",
-            "default": true
-          }
-        }
-      },
-      "description": "Not Found"
+    "parameters": {
+      "id": {
+        "in": "path",
+        "name": "id",
+        "schema": {
+          "type": "integer",
+          "example": 1
+        },
+        "required": true
+      }
     },
-    "Forbidden": {
-      "schema": {
-        "type": "object",
-        "description": "Forbidden",
-        "properties": {
-          "status": {
-            "type": "number",
-            "example": 403,
-            "default": true
-          },
-          "error": {
-            "type": "string",
-            "example": "Forbidden",
-            "default": true
-          },
-          "message": {
-            "type": "string",
-            "example": "You not authorized to perform this action",
-            "default": true
-          }
-        }
-      },
-      "description": "Access denied"
+    "requestBodies": {
     },
-    "Unauthorized": {
-      "schema": {
-        "type": "object",
-        "description": "Forbidden",
-        "properties": {
-          "error": {
-            "type": "object",
-            "properties": {
-              "status": {
-                "type": "number",
-                "example": 401,
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "example": "Unauthorized",
-                "default": true
-              },
-              "message": {
-                "type": "string",
-                "example": "E_INVALID_JWT_TOKEN: jwt must be provided",
-                "default": true
+    "responses": {
+      "Authorized": {
+        "description": "Authorized",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Token"}}}
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "messsage": {
+                    "type": "string",
+                    "example": "required validation failed"
+                  },
+                  "field": {
+                    "type": "string",
+                    "example": "email"
+                  },
+                  "validation": {
+                    "type": "string",
+                    "example": "required"
+                  }
+                }
               }
             }
           }
         }
       },
-      "description": "Unauthorized"
-    },
-    "InternalServerError": {
-      "schema": {
-        "type": "object",
-        "description": "Forbidden",
-        "properties": {
-          "status": {
-            "type": "number",
-            "example": 500,
-            "default": true
-          },
-          "error": {
-            "type": "string",
-            "example": "Server error",
-            "default": true
-          },
-          "message": {
-            "type": "string",
-            "example": "Server error",
-            "default": true
+      "NotFound": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "description": "Not Found",
+              "properties": {
+                "status": {
+                  "type": "number",
+                  "example": 404,
+                  "default": true
+                },
+                "error": {
+                  "type": "string",
+                  "example": "Not Found",
+                  "default": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Does not exist!",
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "description": "Not Found"
+      },
+      "Forbidden": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "description": "Forbidden",
+              "properties": {
+                "status": {
+                  "type": "number",
+                  "example": 403,
+                  "default": true
+                },
+                "error": {
+                  "type": "string",
+                  "example": "Forbidden",
+                  "default": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "You not authorized to perform this action",
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "description": "Access denied"
+      },
+      "Unauthorized": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "description": "Forbidden",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 401,
+                      "default": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Unauthorized",
+                      "default": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "E_INVALID_JWT_TOKEN: jwt must be provided",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Unauthorized"
+      },
+      "InternalServerError": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "description": "Forbidden",
+              "properties": {
+                "status": {
+                  "type": "number",
+                  "example": 500,
+                  "default": true
+                },
+                "error": {
+                  "type": "string",
+                  "example": "Server error",
+                  "default": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Server error",
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "description": "Internal Server Error"
+      },
+      "Entertainment-extended": {
+        "description": "Entertainment with all relations",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Entertainment"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "places": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/Place"}
+                    }
+                  }
+                }
+              ]
+            }
           }
         }
       },
-      "description": "Internal Server Error"
-    }
-  },
-  "definitions": {
-    "Entertainment": {
-      "required": [
-        "title"
-      ],
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "title": {
-          "type": "string",
-          "example": "Клуб “Blok-Post”"
-        },
-        "order": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "places": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/Place"
+      "Place-extended": {
+        "description": "Place with all relations",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Place"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "requirements": {
+                      "$ref": "#/components/schemas/Requirement"
+                    },
+                    "photos": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/Photo"}
+                    },
+                    "contacts": {
+                      "$ref": "#/components/schemas/Contact"
+                    }
+                  }
+                }
+              ]
+            }
           }
-        },
-        "created_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
-        },
-        "updated_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
         }
       }
     },
-    "Place": {
-      "required": [
-        "title",
-        "picture_url",
-        "price",
-        "map_url",
-        "website_url",
-        "phone",
-        "entertainment_id"
-      ],
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "title": {
-          "type": "string",
-          "example": "Клуб “Blok-Post”"
-        },
-        "picture_url": {
-          "type": "string",
-          "example": "http://www.laser-tag.zp.ua/wp-content/uploads/2018/06/cropped-Club-Block-Post..jpg"
-        },
-        "working_hours": {
-          "type": "string",
-          "example": "ежедневно с 7:00 до 19:00"
-        },
-        "price": {
-          "type": "string",
-          "example": "от 300 грн/чел"
-        },
-        "map_url": {
-          "type": "string",
-          "example": "https://www.google.com/maps/place/Klub+%22Blok-Post%22+Peyntbol,Lazertag,TIR,Arenda+besedok./@47.7976408,35.167646,15z/data=!4m2!3m1!1s0x0:0xd3cabe72da827682?sa=X&ved=2ahUKEwjKjq-YyPrjAhWtwqYKHePkAQQQ_BIwCnoECAoQCA"
-        },
-        "website_url": {
-          "type": "string",
-          "example": "http://www.laser-tag.zp.ua"
-        },
-        "phone": {
-          "type": "string",
-          "example": "+380961039348"
-        },
-        "entertainment_id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "created_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
-        },
-        "updated_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
+    "schemas": {
+      "Token": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "bearer"
+          },
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjExLCJkYXRhIjp7Im5hbWUiOiLQn9Cw0LLQtdC7IN..."
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "f24faf2f153a36db2809505cad9c4e5b9ZcsMbB8nwUSkJmyvOjzktu5b9ZcsMbB8nwUSkJmyvOjzktu..."
+          }
         }
-      }
-    },
-    "Photo": {
-      "required": [
-        "url"
-      ],
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "place_id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "url": {
-          "type": "string",
-          "example": "https://place.com/pucture.jpg"
-        },
-        "created_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
-        },
-        "updated_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Pavel Kostyuk"
+          },
+          "email": {
+            "type": "string",
+            "example": "pavliha@mailinator.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+380683188524"
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "http://192.168.0.103:3333/images/dummy/pavliha.jpg"
+          },
+          "is_superadmin": {
+            "type": "boolean",
+            "default": false
+          },
+          "is_active": {
+            "type": "boolean",
+            "default": true
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          }
         }
-      }
-    },
-    "Contact": {
-      "required": [
-        "phone"
-      ],
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "phone": {
-          "type": "string",
-          "example": "+380957791945"
-        },
-        "address": {
-          "type": "string",
-          "example": "ул. Седова, 36"
-        },
-        "map_url": {
-          "type": "string",
-          "example": "https://www.google.com.ua/maps/place/%D0%9A%D0%BB%D1%83%D0%B1+%22%D0%9E%D1%81%D1%82%D1%80%D0%BE%D0%B2+%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9%22,+%D0%BB%D0%B0%D0%B7%D0%B5%D1%80%D1%82%D0%B0%D0%B3,+%D0%BF%D0%B5%D0%B9%D0%BD%D1%82%D0%B1%D0%BE%D0%BB,+%D0%BB%D1%83%D1%87%D0%BD%D1%8B%D0%B9+%D1%82%D0%B8%D1%80/@47.8527247,35.1428418,17z/data=!4m13!1m7!3m6!1s0x40dc673c46bdaf25:0x18b329921db7a8b6!2z0YPQuy4g0KHQtdC00L7QstCwLCAzNiwg0JfQsNC_0L7RgNC-0LbRjNC1LCDQl9Cw0L_QvtGA0L7QttGB0LrQsNGPINC-0LHQu9Cw0YHRgtGMLCA2OTAwMA!3b1!8m2!3d47.8527247!4d35.1429276!3m4!1s0x0:0x96f47db488b09185!8m2!3d47.8521155!4d35.1429006?hl=ru"
-        },
-        "website_url": {
-          "type": "string",
-          "example": "https://www.ostrovclub.zp.ua/"
-        },
-        "email": {
-          "type": "string",
-          "example": "example@email.com"
-        },
-        "instagram_url": {
-          "type": "string"
-        },
-        "created_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
-        },
-        "updated_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
+      },
+      "Entertainment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "title": {
+            "type": "string",
+            "example": "Клуб “Blok-Post”"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1,
+            "readOnly": true
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          }
         }
-      }
-    },
-    "User": {
-      "required": [
-        "name",
-        "email",
-        "password",
-        "phone"
-      ],
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string",
-          "example": "Pavel Kostyuk"
-        },
-        "email": {
-          "type": "string",
-          "example": "pavliha@mailinator.com"
-        },
-        "phone": {
-          "type": "string",
-          "example": "+380683188524"
-        },
-        "avatar_url": {
-          "type": "string",
-          "example": "http://192.168.0.103:3333/images/dummy/pavliha.jpg"
-        },
-        "is_superadmin": {
-          "type": "boolean",
-          "default": false
-        },
-        "is_active": {
-          "type": "boolean",
-          "default": true
-        },
-        "created_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
-        },
-        "updated_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
+      },
+      "Place": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "title": {
+            "type": "string",
+            "example": "Клуб “Blok-Post”",
+            "required": true
+          },
+          "picture_url": {
+            "type": "string",
+            "example": "http://www.laser-tag.zp.ua/wp-content/uploads/2018/06/cropped-Club-Block-Post..jpg"
+          },
+          "working_hours": {
+            "type": "string",
+            "example": "ежедневно с 7:00 до 19:00"
+          },
+          "price": {
+            "type": "string",
+            "example": "от 300 грн/чел"
+          },
+          "entertainment_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1,
+            "required": true
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          }
         }
-      }
-    },
-    "Social": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "user_id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "provider": {
-          "type": "string",
-          "example": "facebook"
-        },
-        "provider_id": {
-          "type": "string",
-          "example": "34523624724"
-        },
-        "created_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
-        },
-        "updated_at": {
-          "type": "string",
-          "example": "2014-06-26 04:07:31"
+      },
+      "Requirement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "min_order_amount": {
+            "type": "number",
+            "example": 200
+          },
+          "age_min": {
+            "type": "number",
+            "example": 10
+          },
+          "age_max": {
+            "type": "number",
+            "example": 16
+          },
+          "players_min": {
+            "type": "number",
+            "example": 4
+          },
+          "players_max": {
+            "type": "number",
+            "example": 16
+          },
+          "place_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1,
+            "required": true
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          }
         }
-      }
-    },
-    "Upload": {
-      "required": [
-        "url"
-      ],
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string",
-          "example": "`http://localhost:3333/uploads/QrEtQFgH.jpg`"
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "+380957791945"
+          },
+          "address": {
+            "type": "string",
+            "example": "ул. Седова, 36"
+          },
+          "directions": {
+            "type": "string",
+            "example": "возле Автовокзала"
+          },
+          "map_url": {"type": "string"},
+          "website_url": {
+            "type": "string",
+            "example": "https://www.ostrovclub.zp.ua/"
+          },
+          "email": {
+            "type": "string",
+            "example": "example@email.com"
+          },
+          "instagram_url": {
+            "type": "string"
+          },
+          "place_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1,
+            "required": true
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          }
+        }
+      },
+      "Photo": {
+        "required": [
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "place_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1,
+            "required": true
+          },
+          "url": {
+            "type": "string",
+            "example": "https://place.com/pucture.jpg",
+            "required": true
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2014-06-26 04:07:31",
+            "readOnly": true
+          }
+        }
+      },
+      "Upload": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "`http://localhost:3333/uploads/QrEtQFgH.jpg`",
+            "required": true
+          }
         }
       }
     }
   }
 }
+
 

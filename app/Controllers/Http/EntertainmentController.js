@@ -2,25 +2,23 @@
 
 const Entertainment = use('App/Models/Entertainment')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
 /**
  * Resourceful controller for interacting with entertainments
  */
 class EntertainmentController {
+
   /**
    * Show a list of all entertainments.
    * GET entertainments
    */
-  async index() {
-    return Entertainment.query()
-      .with('places', builder => builder.where({ is_active: true }))
+  async index({ transform, auth }) {
+    const entertainments = await Entertainment.query()
+      .with('places', builder => auth || builder.where({ is_active: true }))
       .where({ is_active: true })
       .orderBy('order')
       .fetch()
+
+    return transform.collection(entertainments, 'EntertainmentListTransformer')
   }
 
   /**
