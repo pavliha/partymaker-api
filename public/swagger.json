@@ -210,6 +210,34 @@
         }
       }
     },
+    "/entertainments/sort": {
+      "post": {
+        "tags": ["entertainments"],
+        "summary": "Reorder entertainments",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sorted_ids": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "example": [1, 3, 4, 5]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {"description": "Accepted"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      }
+    },
     "/entertainments/{id}": {
       "get": {
         "tags": ["entertainments"],
@@ -432,7 +460,13 @@
     "responses": {
       "Authorized": {
         "description": "Authorized",
-        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Token"}}}
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Token"
+            }
+          }
+        }
       },
       "ValidationError": {
         "description": "Validation error",
@@ -592,7 +626,9 @@
                   "properties": {
                     "places": {
                       "type": "array",
-                      "items": {"$ref": "#/components/schemas/Place"}
+                      "items": {
+                        "$ref": "#/components/schemas/Place"
+                      }
                     }
                   }
                 }
@@ -618,7 +654,9 @@
                     },
                     "photos": {
                       "type": "array",
-                      "items": {"$ref": "#/components/schemas/Photo"}
+                      "items": {
+                        "$ref": "#/components/schemas/Photo"
+                      }
                     },
                     "contacts": {
                       "$ref": "#/components/schemas/Contact"
