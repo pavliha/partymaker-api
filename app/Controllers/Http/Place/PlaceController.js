@@ -1,11 +1,13 @@
-'use strict'
-
+const { difference, intersection } = require('lodash')
+const { basename } = require('path')
 const Drive = use('Drive')
 const Place = use('App/Models/Place')
 
 /**
  * Resourceful controller for interacting with places
  */
+
+
 class PlaceController {
   /**
    * Show a list of all places.
@@ -33,11 +35,10 @@ class PlaceController {
   async store({ request, response }) {
     const { requirements, contacts, photos, ...form } = request.all()
     const place = await Place.create(form)
-    if (requirements) await place.requirements().create(requirements)
+    if (requirements) await place.requirement().create(requirements)
     if (contacts) await place.contacts().create(contacts)
     if (photos) await place.photos().createMany(photos)
-    const createdPlace = this.show({ params: { id: place.id } })
-    return response.created(createdPlace)
+    return response.created(await Place.findComplete(place.id))
   }
 
   /**
@@ -47,14 +48,7 @@ class PlaceController {
    * @param {object} ctx
    */
   async show({ params }) {
-    return Place
-      .query()
-      .with('requirements')
-      .with('photos')
-      .with('contacts')
-      .with('entertainment')
-      .where({ id: params.id })
-      .firstOrFail()
+    return Place.findComplete(params.id)
   }
 
   /**
@@ -66,10 +60,37 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async update({ auth, request, response, place }) {
-    const fields = request.all()
-    place.merge({ ...fields, admin_id: auth.user.id })
+    const { requirements, contacts, photos, ...form } = request.all()
+
+    const placeForm = {
+      title: form.title,
+      picture_url: form.picture_url,
+      working_hours: form.working_hours,
+      price: form.price,
+      entertainment_id: form.entertainment_id,
+      description: form.description,
+    }
+
+    place.merge({ ...placeForm, admin_id: auth.user.id })
+    if (requirements) await place.requirements().update(requirements)
+    if (contacts) await place.contact().update(contacts)
+
+    if (photos) {
+      const oldPhotoModels = (await place.photos().fetch()).toJSON()
+      const oldPhotos = oldPhotoModels.map(photo => photo.url)
+      const newPhotos = photos.map(photo => photo.url)
+      const toAdd = difference(newPhotos, oldPhotos)
+      const toRemove = difference(oldPhotos, intersection(newPhotos, oldPhotos))
+      place.photos().createMany(toAdd.map(url => ({ url: basename(url) })))
+      await Promise.all(toRemove.map(async url => {
+        const fileName = basename(url)
+        await Drive.delete(fileName)
+        return place.photos().where({ url: fileName }).delete()
+      }))
+    }
+
     await place.save()
-    return response.updated(place)
+    return response.updated(await Place.findComplete(place.id))
   }
 
   /**

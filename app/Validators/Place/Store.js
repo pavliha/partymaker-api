@@ -13,10 +13,12 @@ module.exports = class Store {
 
   get sanitizationRules() {
     return {
-      players_min: 'to_int',
-      players_max: 'to_int',
       entertainment_id: 'to_int',
-      age: 'to_int',
+      'requirements.min_order_amount': 'to_int',
+      'requirements.min_age': 'to_int',
+      'requirements.max_age': 'to_int',
+      'requirements.players_min': 'to_int',
+      'requirements.players_max': 'to_int',
     }
   }
 
@@ -26,13 +28,13 @@ module.exports = class Store {
       picture_url: 'string',
       price: 'string',
       working_hours: 'string',
-      entertainment_id: 'required|number',
+      entertainment_id: 'required|integer',
       photos: 'array',
-      'requirements.min_order_amount': 'number',
-      'requirements.min_age': 'number',
-      'requirements.max_age': 'number',
-      'requirements.players_min': 'number',
-      'requirements.players_max': 'number',
+      'requirements.min_order_amount': 'integer',
+      'requirements.min_age': 'integer',
+      'requirements.max_age': 'integer',
+      'requirements.players_min': 'integer',
+      'requirements.players_max': 'integer',
       'contacts.website_url': 'url',
       'contacts.address': 'string',
       'contacts.directions': 'string',

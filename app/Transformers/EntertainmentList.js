@@ -3,12 +3,12 @@
 const BumblebeeTransformer = use('Bumblebee/Transformer')
 
 /**
- * EntertainmentListTransformer class
+ * EntertainmentList class
  *
- * @class EntertainmentListTransformer
+ * @class EntertainmentList
  * @constructor
  */
-class EntertainmentListTransformer extends BumblebeeTransformer {
+class EntertainmentList extends BumblebeeTransformer {
   /**
    * This method is used to transform the data.
    */
@@ -32,4 +32,4 @@ class EntertainmentListTransformer extends BumblebeeTransformer {
   }
 }
 
-module.exports = EntertainmentListTransformer
+module.exports = EntertainmentList

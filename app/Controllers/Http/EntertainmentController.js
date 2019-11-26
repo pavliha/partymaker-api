@@ -18,7 +18,7 @@ class EntertainmentController {
       .orderBy('order')
       .fetch()
 
-    return transform.collection(entertainments, 'EntertainmentListTransformer')
+    return transform.collection(entertainments, 'EntertainmentList')
   }
 
   /**

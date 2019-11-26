@@ -10,6 +10,16 @@ class Place extends Model {
     return 'App/Policies/Place'
   }
 
+  static findComplete(id) {
+    return this.query()
+      .with('requirements')
+      .with('photos')
+      .with('contacts')
+      .with('entertainment')
+      .where({ id })
+      .firstOrFail()
+  }
+
   setPictureUrl(url) {
     return basename(url)
   }
@@ -18,12 +28,13 @@ class Place extends Model {
     return `${Env.get('APP_URL')}/uploads/${url}`
   }
 
+
   entertainment() {
     return this.belongsTo('App/Models/Entertainment')
   }
 
   requirements() {
-    return this.hasMany('App/Models/Requirements')
+    return this.hasOne('App/Models/Requirement')
   }
 
   photos() {

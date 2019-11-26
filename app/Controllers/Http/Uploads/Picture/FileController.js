@@ -2,6 +2,7 @@ const { basename } = require('path')
 const Drive = use('Drive')
 const ImageProcessor = use('ImageProcessor')
 const utils = require('../../../../../utils')
+const Env = use('Env')
 
 /**
  @typedef {import('@adonisjs/framework/src/Request')} Request
@@ -32,7 +33,7 @@ class FileController {
     if (type === 'thumbnail') ImageProcessor.createThumbnail(fileName)
     if (type === 'slide') ImageProcessor.createSlide(fileName)
 
-    return response.created({ url: `/uploads/${fileName}` })
+    return response.created({ url: `${Env.get('APP_URL')}/uploads/${fileName}` })
   }
 
   /**
