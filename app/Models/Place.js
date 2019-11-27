@@ -1,5 +1,6 @@
-const { difference, intersection } = require('lodash')
 const { basename } = require('path')
+const { compare } = require('../../utils')
+const { pick } = require('lodash')
 
 const Model = use('Model')
 const Env = use('Env')
@@ -23,75 +24,28 @@ class Place extends Model {
       .firstOrFail()
   }
 
-
-  async _getPhotos() {
-    const photos = await this.photos().fetch()
-    return photos.toJSON().map(photo => photo.url)
+  async syncPrices(newPrices) {
+    const oldPrices = await this.prices().fetch()
+    const [toAdd, toRemove] = compare(oldPrices.toJSON(), newPrices, 'title')
+    this.prices().createMany(toAdd.map(m => pick(m, ['title', 'cost'])))
+    await this.prices().whereIn('title', toRemove.map(m => m.title)).delete()
   }
 
-  _addPhotos(toAdd) {
-    return this.photos().createMany(toAdd.map(url => ({ url: basename(url) })))
+  async syncServices(newServices) {
+    const oldServices = await this.additional_services().fetch()
+    const [toAdd, toRemove] = compare(oldServices.toJSON(), newServices, 'title')
+    const toCreate = toAdd.map(m => pick(m, ['title', 'description', 'price']))
+    this.additional_services().createMany(toCreate)
+    await this.additional_services().whereIn('title', toRemove.map(m => m.title)).delete()
   }
 
-  async _removePhotos(toRemove) {
-    return Promise.all(toRemove.map(async url => {
-      const filename = basename(url)
-      await Drive.delete(filename)
-      return this.photos().where({ url: filename }).delete()
-    }))
-  }
-
-  async syncPhotos(photos) {
-    const oldPhotos = await this._getPhotos()
-    const newPhotos = photos.map(photo => photo.url)
-    const toAdd = difference(newPhotos, oldPhotos)
-    const toRemove = difference(oldPhotos, intersection(newPhotos, oldPhotos))
-    await this._addPhotos(toAdd)
-    await this._removePhotos(toRemove)
-  }
-
-  async _getPrices() {
-    const prices = await this.prices().fetch()
-    return prices.toJSON().map(price => price.title)
-  }
-
-  _addPrices(toAdd) {
-    return this.prices().createMany(toAdd.map(title => ({ title })))
-  }
-
-  async _removePrices(toRemove) {
-    return Promise.all(toRemove.map(async title => this.prices().where({ title }).delete()))
-  }
-
-  async syncPrices(prices) {
-    const oldPrices = await this._getPrices()
-    const newPrices = prices.map(price => price.title)
-    const toAdd = difference(newPrices, oldPrices)
-    const toRemove = difference(oldPrices, intersection(newPrices, oldPrices))
-    await this._addPrices(toAdd)
-    await this._removePrices(toRemove)
-  }
-
-  async _getServices() {
-    const services = await this.additional_services().fetch()
-    return services.toJSON().map(service => service.title)
-  }
-
-  _addServices(toAdd) {
-    return this.additional_services().createMany(toAdd.map(title => ({ title })))
-  }
-
-  async _removeServices(toRemove) {
-    return Promise.all(toRemove.map(async title => this.additional_services().where({ title }).delete()))
-  }
-
-  async syncServices(services) {
-    const oldServices = await this._getServices()
-    const newServices = services.map(service => service.title)
-    const toAdd = difference(newServices, oldServices)
-    const toRemove = difference(oldServices, intersection(newServices, oldServices))
-    await this._addServices(toAdd)
-    await this._removeServices(toRemove)
+  async syncPhotos(newPhotos) {
+    const oldPhotos = await this.photos().fetch()
+    const [toAdd, toRemove] = compare(oldPhotos.toJSON(), newPhotos, 'url')
+    await this.photos().createMany(toAdd.map(m => ({ url: basename(m.url) })))
+    const urlsToRemove = toRemove.map(m => basename(m.url))
+    await this.photos().whereIn('url', urlsToRemove).delete()
+    urlsToRemove.map(filename => Drive.delete(filename))
   }
 
   setPictureUrl(url) {
