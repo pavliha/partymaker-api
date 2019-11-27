@@ -31,6 +31,7 @@ module.exports = class Store extends Validator {
       working_hours: 'string',
       entertainment_id: 'required|integer',
       photos: 'array',
+      description: 'string',
       'requirements.min_order_amount': 'integer',
       'requirements.min_age': 'integer',
       'requirements.max_age': 'integer',
