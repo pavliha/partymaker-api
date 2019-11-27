@@ -1,7 +1,6 @@
 const { difference, intersection } = require('lodash')
 const { basename } = require('path')
 
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 const Env = use('Env')
 const Drive = use('Drive')
@@ -16,7 +15,9 @@ class Place extends Model {
     return this.query()
       .with('requirements')
       .with('photos')
+      .with('prices')
       .with('contacts')
+      .with('additional_services')
       .with('entertainment')
       .where({ id })
       .firstOrFail()
@@ -40,7 +41,7 @@ class Place extends Model {
     }))
   }
 
-  async diffPhotos(photos) {
+  async syncPhotos(photos) {
     const oldPhotos = await this._getPhotos()
     const newPhotos = photos.map(photo => photo.url)
     const toAdd = difference(newPhotos, oldPhotos)
@@ -49,6 +50,49 @@ class Place extends Model {
     await this._removePhotos(toRemove)
   }
 
+  async _getPrices() {
+    const prices = await this.prices().fetch()
+    return prices.toJSON().map(price => price.title)
+  }
+
+  _addPrices(toAdd) {
+    return this.prices().createMany(toAdd.map(title => ({ title })))
+  }
+
+  async _removePrices(toRemove) {
+    return Promise.all(toRemove.map(async title => this.prices().where({ title }).delete()))
+  }
+
+  async syncPrices(prices) {
+    const oldPrices = await this._getPrices()
+    const newPrices = prices.map(price => price.title)
+    const toAdd = difference(newPrices, oldPrices)
+    const toRemove = difference(oldPrices, intersection(newPrices, oldPrices))
+    await this._addPrices(toAdd)
+    await this._removePrices(toRemove)
+  }
+
+  async _getServices() {
+    const services = await this.additional_services().fetch()
+    return services.toJSON().map(service => service.title)
+  }
+
+  _addServices(toAdd) {
+    return this.additional_services().createMany(toAdd.map(title => ({ title })))
+  }
+
+  async _removeServices(toRemove) {
+    return Promise.all(toRemove.map(async title => this.additional_services().where({ title }).delete()))
+  }
+
+  async syncServices(services) {
+    const oldServices = await this._getServices()
+    const newServices = services.map(service => service.title)
+    const toAdd = difference(newServices, oldServices)
+    const toRemove = difference(oldServices, intersection(newServices, oldServices))
+    await this._addServices(toAdd)
+    await this._removeServices(toRemove)
+  }
 
   setPictureUrl(url) {
     return basename(url)
@@ -73,6 +117,14 @@ class Place extends Model {
 
   contacts() {
     return this.hasOne('App/Models/Contact')
+  }
+
+  prices() {
+    return this.hasMany('App/Models/Price')
+  }
+
+  additional_services() {
+    return this.hasMany('App/Models/AdditionalService')
   }
 }
 

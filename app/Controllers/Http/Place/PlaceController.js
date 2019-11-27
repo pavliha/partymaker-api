@@ -30,11 +30,13 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async store({ request, response }) {
-    const { requirements, contacts, photos, ...form } = request.validated()
+    const { requirements, contacts, photos, prices, additional_services, ...form } = request.validated()
     const place = await Place.create(form)
     if (requirements) await place.requirements().create(requirements)
     if (contacts) await place.contacts().create(contacts)
     if (photos) await place.photos().createMany(photos)
+    if (prices) await place.createMany(prices)
+    if (additional_services) await place.createMany(additional_services)
     return response.created(await Place.findComplete(place.id))
   }
 
@@ -57,11 +59,13 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async update({ auth, request, response, place }) {
-    const { requirements, contacts, photos, ...form } = request.validated()
+    const { requirements, contacts, photos, prices, additional_services, ...form } = request.validated()
     place.merge({ ...form, admin_id: auth.user.id })
     if (requirements) await place.requirements().update(requirements)
     if (contacts) await place.contacts().update(contacts)
-    if (photos) await place.diffPhotos(photos)
+    if (photos) await place.syncPhotos(photos)
+    if (prices) await place.syncPrices(prices)
+    if (additional_services) await place.syncServices(additional_services)
     await place.save()
     return response.updated(await Place.findComplete(place.id))
   }
