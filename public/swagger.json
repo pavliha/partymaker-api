@@ -523,6 +523,19 @@
           "500": {"$ref": "#/components/responses/InternalServerError"}
         }
       }
+    },
+    "/uploads/{filename}": {
+      "delete": {
+        "summary": "Delete upload",
+        "parameters": [
+          {"$ref": "#/components/parameters/filename"}
+        ],
+        "responses": {
+          "204": {"description": "No Content"},
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      }
     }
   },
   "components": {
@@ -542,6 +555,15 @@
           "example": 1
         },
         "required": true
+      },
+      "filename": {
+        "in": "path",
+        "name": "filename",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "picture.jpg"
+        }
       }
     },
     "requestBodies": {
@@ -998,9 +1020,6 @@
         }
       },
       "Photo": {
-        "required": [
-          "url"
-        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1016,7 +1035,7 @@
           },
           "url": {
             "type": "string",
-            "example": "https://place.com/pucture.jpg",
+            "example": "https://place.com/picture.jpg",
             "required": true
           },
           "created_at": {

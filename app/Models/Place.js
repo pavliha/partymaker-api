@@ -4,6 +4,7 @@ const { basename } = require('path')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 const Env = use('Env')
+const Drive = use('Drive')
 
 class Place extends Model {
 
@@ -21,13 +22,31 @@ class Place extends Model {
       .firstOrFail()
   }
 
+
+  async _getPhotos() {
+    const photos = await this.photos().fetch()
+    return photos.toJSON().map(photo => photo.url)
+  }
+
+  _addPhotos(toAdd) {
+    return this.photos().createMany(toAdd.map(url => ({ url: basename(url) })))
+  }
+
+  async _removePhotos(toRemove) {
+    return Promise.all(toRemove.map(async url => {
+      const filename = basename(url)
+      await Drive.delete(filename)
+      return this.photos().where({ url: filename }).delete()
+    }))
+  }
+
   async diffPhotos(photos) {
-    const oldPhotos = (await this.photos().fetch()).toJSON().map(photo => photo.url)
+    const oldPhotos = await this._getPhotos()
     const newPhotos = photos.map(photo => photo.url)
     const toAdd = difference(newPhotos, oldPhotos)
     const toRemove = difference(oldPhotos, intersection(newPhotos, oldPhotos))
-    await this.photos().createMany(toAdd.map(url => ({ url: basename(url) })))
-    await Promise.all(toRemove.map(async url => this.photos().where({ url: basename(url) }).delete()))
+    await this._addPhotos(toAdd)
+    await this._removePhotos(toRemove)
   }
 
 
