@@ -70,6 +70,7 @@
     "util-to": "^1.0.2"
   },
   "autoload": {
-    "App": "./app"
+    "App": "./app",
+    "utils": "./utils"
   }
 }

@@ -1,6 +1,7 @@
 const Place = use('App/Models/Place')
+const Validator = use('App/Validators/Validator')
 
-module.exports = class Store {
+module.exports = class Store extends Validator {
 
   async authorize() {
     const { auth, response } = this.ctx
@@ -43,9 +44,5 @@ module.exports = class Store {
       'contacts.map_url': 'url',
       'contacts.phone': 'string',
     }
-  }
-
-  get validateAll() {
-    return true
   }
 }

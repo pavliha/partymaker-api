@@ -1,3 +1,4 @@
+const { difference, intersection } = require('lodash')
 const { basename } = require('path')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
@@ -19,6 +20,16 @@ class Place extends Model {
       .where({ id })
       .firstOrFail()
   }
+
+  async diffPhotos(photos) {
+    const oldPhotos = (await this.photos().fetch()).toJSON().map(photo => photo.url)
+    const newPhotos = photos.map(photo => photo.url)
+    const toAdd = difference(newPhotos, oldPhotos)
+    const toRemove = difference(oldPhotos, intersection(newPhotos, oldPhotos))
+    await this.photos().createMany(toAdd.map(url => ({ url: basename(url) })))
+    await Promise.all(toRemove.map(async url => this.photos().where({ url: basename(url) }).delete()))
+  }
+
 
   setPictureUrl(url) {
     return basename(url)

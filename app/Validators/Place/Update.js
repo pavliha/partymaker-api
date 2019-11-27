@@ -1,6 +1,8 @@
 const Place = use('App/Models/Place')
+const Store = use('App/Validators/Place/Store')
 
-module.exports = class Update {
+
+module.exports = class Update extends Store {
 
   async authorize() {
     const { auth, response, params } = this.ctx
@@ -10,29 +12,4 @@ module.exports = class Update {
     return true
   }
 
-  get sanitizationRules() {
-    return {
-      players_min: 'to_int',
-      players_max: 'to_int',
-      entertainment_id: 'to_int',
-      age: 'to_int',
-    }
-  }
-
-  get rules() {
-    return {
-      title: 'required|string',
-      picture_url: 'string',
-      age: 'number',
-      price: 'string',
-      players_min: 'number',
-      players_max: 'number',
-      working_hours: 'string',
-      entertainment_id: 'required|number'
-    }
-  }
-
-  get validateAll() {
-    return true
-  }
 }
