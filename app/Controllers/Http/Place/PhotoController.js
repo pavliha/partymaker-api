@@ -11,49 +11,44 @@ class PhotoController {
    * GET /places/:places_id/photos
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
    */
-  async index({ request, params: { places_id } }) {
-    const { page, limit } = request.all()
+  async index({ params: { place_id } }) {
     return Photo.query()
       .with('user')
-      .where({ place_id: places_id })
-      .paginate({ page, limit })
+      .where({ place_id })
+      .fetch()
   }
 
   /**
    * Create/save a new photo.
-   * POST /places/:places_id/photos
+   * POST /places/:place_id/photos
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response, params }) {
+  async store({ request, response, params: { place_id } }) {
     const { url } = request.all()
-    const place = await Photo.create({
-      place_id: params.places_id,
-      url,
-    })
+    const place = await Photo.create({ place_id, url, })
     return response.created(place)
   }
 
   /**
    * Display a single photo.
-   * GET /places/:places_id/photos/:id
+   * GET /places/photos/:id
    *
    * @param {object} ctx
    */
-  async show({ params }) {
+  async show({ params: { id } }) {
     return Photo.query()
-      .where({ place_id: params.places_id, id: params.id })
+      .where({ id })
       .with('user')
       .firstOrFail()
   }
 
   /**
    * Update place details.
-   * PUT or PATCH places/:places_id/photos/:id
+   * PUT or PATCH places/photos/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -68,7 +63,7 @@ class PhotoController {
 
   /**
    * Delete a photo with id.
-   * DELETE places/:places_id/photos/:id
+   * DELETE places/photos/:id
    *
    * @param {object} ctx
    * @param {Response} ctx.response

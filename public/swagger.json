@@ -6,6 +6,7 @@
     {"name": "user", "description": "get user"},
     {"name": "entertainments", "description": "entertainments"},
     {"name": "places", "description": "places"},
+    {"name": "photos", "description": "photos"},
     {"name": "uploads", "description": "uploads"}
   ],
   "paths": {
@@ -342,6 +343,93 @@
         }
       }
     },
+    "/places/{id}/photos": {
+      "get": {
+        "summary": "List of photos for current place",
+        "tags": ["photos"],
+        "parameters": [
+          {"$ref": "#/components/parameters/id"}
+        ],
+        "responses": {
+          "200": {
+            "description": "List of photos", "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Photo"
+                  }
+                }
+              }
+            }
+          },
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      },
+      "post": {
+        "tags": ["photos"],
+        "security": [{"bearerAuth": []}],
+        "summary": "Create new photo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/Photo"}
+            }
+          }
+        },
+        "responses": {
+          "201": {"$ref": "#/components/responses/Photo"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      }
+    },
+    "/places/photos/{id}": {
+      "get": {
+        "tags": ["photos"],
+        "summary": "Get photo",
+        "parameters": [
+          {"$ref": "#/components/parameters/id"}
+        ],
+        "responses": {
+          "200": {"$ref": "#/components/responses/Photo"},
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      },
+      "put": {
+        "tags": ["photos"],
+        "summary": "Update photo",
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {"$ref": "#/components/parameters/id"}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/Photo"}
+            }
+          }
+        },
+        "responses": {
+          "202": {"$ref": "#/components/responses/Photo"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      },
+      "delete": {
+        "summary": "Delete photo",
+        "parameters": [
+          {"$ref": "#/components/parameters/id"}
+        ],
+        "responses": {
+          "204": {"description": "No Content"},
+          "404": {"$ref": "#/components/responses/NotFound"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      }
+    },
     "/uploads/picture/file": {
       "post": {
         "tags": ["uploads"],
@@ -666,6 +754,14 @@
                 }
               ]
             }
+          }
+        }
+      },
+      "Photo": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {"$ref": "#/components/schemas/Photo"}
           }
         }
       }
