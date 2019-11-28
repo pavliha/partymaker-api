@@ -43,10 +43,12 @@ class Place extends Model {
   }
 
   async syncPhotos(newPhotos) {
+    const whiteFn = m => ({ url: basename(m.url), order: m.order })
     const oldPhotos = await this.photos().fetch()
-    const [toAdd, toRemove] = compare(oldPhotos.toJSON(), newPhotos, 'url')
-    await this.photos().createMany(toAdd.map(m => ({ url: basename(m.url) })))
+    const [toAdd, toRemove, toUpdate] = compare(oldPhotos.toJSON(), newPhotos, 'url')
+    await this.photos().createMany(toAdd.map(whiteFn))
     const urlsToRemove = toRemove.map(m => basename(m.url))
+    await Promise.all(toUpdate.map(m => this.photos().where({ id: m.id }).update(whiteFn(m))))
     await this.photos().whereIn('url', urlsToRemove).delete()
     urlsToRemove.map(filename => Drive.delete(filename))
   }
