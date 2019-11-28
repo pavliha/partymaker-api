@@ -25,17 +25,20 @@ class Place extends Model {
   }
 
   async syncPrices(newPrices) {
+    const writableFn = m => pick(m, ['title', 'cost'])
     const oldPrices = await this.prices().fetch()
-    const [toAdd, toRemove] = compare(oldPrices.toJSON(), newPrices, 'title')
-    this.prices().createMany(toAdd.map(m => pick(m, ['title', 'cost'])))
+    const [toAdd, toRemove, toUpdate] = compare(oldPrices.toJSON(), newPrices, 'title')
+    await Promise.all(toUpdate.map(m => this.prices().where({ id: m.id }).update(writableFn(m))))
+    this.prices().createMany(toAdd.map(writableFn))
     await this.prices().whereIn('title', toRemove.map(m => m.title)).delete()
   }
 
   async syncServices(newServices) {
+    const writableFn = m => pick(m, ['title', 'description', 'price'])
     const oldServices = await this.additional_services().fetch()
-    const [toAdd, toRemove] = compare(oldServices.toJSON(), newServices, 'title')
-    const toCreate = toAdd.map(m => pick(m, ['title', 'description', 'price']))
-    this.additional_services().createMany(toCreate)
+    const [toAdd, toRemove, toUpdate] = compare(oldServices.toJSON(), newServices, 'title')
+    await Promise.all(toUpdate.map(m => this.additional_services().where({ id: m.id }).update(writableFn(m))))
+    this.additional_services().createMany(toAdd.map(writableFn))
     await this.additional_services().whereIn('title', toRemove.map(m => m.title)).delete()
   }
 

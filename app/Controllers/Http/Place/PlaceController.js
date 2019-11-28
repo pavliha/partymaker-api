@@ -35,8 +35,8 @@ class PlaceController {
     if (requirements) await place.requirements().create(requirements)
     if (contacts) await place.contacts().create(contacts)
     if (photos) await place.photos().createMany(photos)
-    if (prices) await place.createMany(prices)
-    if (additional_services) await place.createMany(additional_services)
+    if (prices) await place.prices().createMany(prices)
+    if (additional_services) await place.additional_services().createMany(additional_services)
     return response.created(await Place.findComplete(place.id))
   }
 

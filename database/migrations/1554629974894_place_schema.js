@@ -14,6 +14,7 @@ class PlaceSchema extends Schema {
       table.integer('admin_id').unsigned().references('id').inTable('users').onDelete('SET NULL')
       table.integer('entertainment_id').unsigned().references('id').inTable('entertainments').onDelete('SET NULL')
       table.boolean('is_active').defaultTo(true)
+      table.text('about_prices')
       table.text('description')
       table.timestamps()
     })
