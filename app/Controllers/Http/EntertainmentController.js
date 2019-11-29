@@ -84,13 +84,11 @@ class EntertainmentController {
    * @param {Response} ctx.response
    */
   async sort({ request, response }) {
-    const { sorted_ids } = request.all()
-    sorted_ids.map(async (id, index) => {
-      const entertainment = await Entertainment.find(id)
-      entertainment.merge({ order: index })
+    request.body.map(async (e) => {
+      const entertainment = await Entertainment.find(e.id)
+      entertainment.merge({ order: e.order })
       await entertainment.save()
     })
-
     return response.updated()
   }
 

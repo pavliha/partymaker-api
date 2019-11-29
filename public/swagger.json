@@ -220,12 +220,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "sorted_ids": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "example": [1, 3, 4, 5]
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id:": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "order:": {
+                      "type": "number",
+                      "example": 2
+                    }
                   }
                 }
               }
