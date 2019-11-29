@@ -6,7 +6,8 @@ const Route = use('Route')
  *
  * */
 
-Route.post('entertainments/sort', 'EntertainmentController.sort')
+Route.patch('entertainments/sort', 'EntertainmentController.sort')
+
 Route.resource('entertainments', 'EntertainmentController')
   .validator([
     ['entertainments.store', 'Entertainment/Store'],

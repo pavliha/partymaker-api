@@ -212,7 +212,7 @@
       }
     },
     "/entertainments/sort": {
-      "post": {
+      "patch": {
         "tags": ["entertainments"],
         "summary": "Reorder entertainments",
         "security": [{"bearerAuth": []}],
@@ -309,6 +309,40 @@
         },
         "responses": {
           "201": {"$ref": "#/components/responses/Place-extended"},
+          "401": {"$ref": "#/components/responses/ValidationError"},
+          "500": {"$ref": "#/components/responses/InternalServerError"}
+        }
+      }
+    },
+    "/places/sort": {
+      "patch": {
+        "tags": ["places"],
+        "summary": "Reorder places",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id:": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "order:": {
+                      "type": "number",
+                      "example": 2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {"description": "Accepted"},
           "401": {"$ref": "#/components/responses/ValidationError"},
           "500": {"$ref": "#/components/responses/InternalServerError"}
         }

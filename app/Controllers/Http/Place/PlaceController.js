@@ -81,6 +81,23 @@ class PlaceController {
     await place.delete()
     return response.deleted()
   }
+
+  /**
+   * Sort places.
+   * PATCH places/sort
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async sort({ request, response }) {
+    request.body.map(async (e) => {
+      const place = await Place.find(e.id)
+      place.merge({ order: e.order })
+      await place.save()
+    })
+    return response.updated()
+  }
 }
 
 module.exports = PlaceController
