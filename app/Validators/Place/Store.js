@@ -16,8 +16,8 @@ module.exports = class Store extends Validator {
     return {
       entertainment_id: 'to_int',
       'requirements.min_order_amount': 'to_int',
-      'requirements.min_age': 'to_int',
-      'requirements.max_age': 'to_int',
+      'requirements.age_min': 'to_int',
+      'requirements.age_max': 'to_int',
       'requirements.players_min': 'to_int',
       'requirements.players_max': 'to_int',
     }
@@ -36,8 +36,8 @@ module.exports = class Store extends Validator {
       prices: 'array',
       about_prices: 'string',
       'requirements.min_order_amount': 'integer',
-      'requirements.min_age': 'integer',
-      'requirements.max_age': 'integer',
+      'requirements.age_min': 'integer',
+      'requirements.age_max': 'integer',
       'requirements.players_min': 'integer',
       'requirements.players_max': 'integer',
       'contacts.website_url': 'url',
