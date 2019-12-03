@@ -35,6 +35,7 @@ server {
     reset_timedout_connection on;
 
     location /uploads {
+        add_header "Access-Control-Allow-Origin" "*";
         alias /home/dev/partymaker-api/public/uploads/;
         autoindex off;
         try_files $uri $uri/ $uri.html =404;
@@ -42,6 +43,7 @@ server {
     }
 
     location / {
+        add_header "Access-Control-Allow-Origin" "*";
         expires 120s;
         proxy_pass http://0.0.0.0:3333;
     }
