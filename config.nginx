@@ -43,7 +43,6 @@ server {
     }
 
     location / {
-        add_header "Access-Control-Allow-Origin" "*";
         expires 120s;
         proxy_pass http://0.0.0.0:3333;
     }
