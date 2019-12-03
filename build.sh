@@ -14,4 +14,4 @@ echo 'Restart nginx service'
 sudo service nginx restart
 
 echo 'Restart pm2'
-/home/dev/.npm-global/bin/pm2 restart server.js
+/home/dev/.npm-global/bin/pm2 restart server.js --name api
