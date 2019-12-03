@@ -474,7 +474,7 @@
         }
       }
     },
-    "/uploads/picture/file": {
+    "/upload/picture/file": {
       "post": {
         "tags": ["uploads"],
         "summary": "Upload picture from the computer",
@@ -521,7 +521,7 @@
         }
       }
     },
-    "/uploads/picture/url": {
+    "/upload/picture/url": {
       "post": {
         "tags": ["uploads"],
         "summary": "Upload picture from url",
@@ -568,7 +568,7 @@
         }
       }
     },
-    "/uploads/{filename}": {
+    "/upload/{filename}": {
       "delete": {
         "tags": ["uploads"],
         "summary": "Delete upload",
