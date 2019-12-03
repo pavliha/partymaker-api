@@ -5,6 +5,12 @@ const Place = use('App/Models/Place')
  */
 
 
+const updateOrCreate = async (relation, form) => {
+  const model = await relation.fetch()
+  return model ? relation.update(form) : relation.create(form)
+}
+
+
 class PlaceController {
   /**
    * Show a list of all places.
@@ -61,12 +67,12 @@ class PlaceController {
   async update({ auth, request, response, place }) {
     const { requirements, contacts, photos, prices, additional_services, ...form } = request.validated()
     place.merge({ ...form, admin_id: auth.user.id })
-    if (requirements) await place.requirements().update(requirements)
-    if (contacts) await place.contacts().update(contacts)
-    if (photos) await place.syncPhotos(photos)
-    if (prices) await place.syncPrices(prices)
-    if (additional_services) await place.syncServices(additional_services)
     await place.save()
+    await updateOrCreate(place.requirements(), requirements)
+    await updateOrCreate(place.contacts(), contacts)
+    await place.syncPhotos(photos)
+    await place.syncPrices(prices)
+    await place.syncServices(additional_services)
     return response.updated(await Place.findComplete(place.id))
   }
 
