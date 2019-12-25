@@ -97,12 +97,15 @@ class PlaceController {
    * @param {Response} ctx.response
    */
   async sort({ request, response }) {
-    request.body.map(async (e) => {
+    const promises = request.body.map(async (e) => {
       const place = await Place.find(e.id)
       place.merge({ order: e.order })
       await place.save()
+      return { id: place.id, title: place.title, order: place.order }
     })
-    return response.updated()
+
+    const results = await Promise.all(promises)
+    return response.updated(results)
   }
 }
 

@@ -6,7 +6,7 @@ const Route = use('Route')
  *
  * */
 
-Route.patch('/places/sort', 'PlaceController.sort')
+Route.patch('/places/sort', 'Place/PlaceController.sort')
 
 Route.resource('places', 'Place/PlaceController')
   .validator([

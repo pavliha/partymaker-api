@@ -5,7 +5,7 @@ const getFileName = (file) => {
     ? file.clientName.substring(0, file.clientName.indexOf('.'))
     : 'no-name'
   const name = sanitizeFileName(clientName)
-  return `${new Date().getTime()}-${name}.${file.subtype}`
+  return `${new Date().getTime()}-${name}.${file.subtype}`.replace(/ /g, '_')
 }
 
 module.exports = getFileName

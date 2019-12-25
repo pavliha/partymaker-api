@@ -58,7 +58,7 @@ class Place extends Model {
   }
 
   getPictureUrl(url) {
-    return `${Env.get('APP_URL')}/uploads/${url}`
+    return url ? `${Env.get('APP_URL')}/uploads/${url}` : null
   }
 
 
