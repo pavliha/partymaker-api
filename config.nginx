@@ -33,8 +33,9 @@ server {
     proxy_buffer_size 64k;
 
     reset_timedout_connection on;
+    client_max_body_size 300m;
 
-    location /uploads {
+  location /uploads {
         add_header "Access-Control-Allow-Origin" "*";
         alias /home/dev/partymaker-api/public/uploads/;
         autoindex off;

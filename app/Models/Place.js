@@ -61,7 +61,6 @@ class Place extends Model {
     return url ? `${Env.get('APP_URL')}/uploads/${url}` : null
   }
 
-
   entertainment() {
     return this.belongsTo('App/Models/Entertainment')
   }
