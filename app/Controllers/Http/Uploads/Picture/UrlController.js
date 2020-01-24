@@ -2,6 +2,7 @@ const { generateNameFromUrl } = require('../../../../../utils')
 const axios = require('axios')
 const Drive = use('Drive')
 const ImageProcessor = use('ImageProcessor')
+const Env = use('Env')
 
 /**
  * Resourceful controller for interacting with assets
@@ -23,7 +24,7 @@ class UrlController {
     await Drive.put(fileName, Buffer.from(picture.data, 'base64'))
     if (type === 'thumbnail') ImageProcessor.createThumbnail(fileName)
     if (type === 'slide') ImageProcessor.createSlide(fileName)
-    return response.created({ url: `/uploads/${fileName}` })
+    return response.created({ url: `${Env.get('APP_URL')}/uploads/${fileName}` })
   }
 }
 
