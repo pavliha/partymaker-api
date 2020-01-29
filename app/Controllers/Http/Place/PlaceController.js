@@ -42,8 +42,10 @@ class PlaceController {
     if (requirements) await place.requirements().create(requirements)
     if (contacts) await place.contacts().create(contacts)
     if (photos) await place.photos().createMany(photos)
-    if (prices) await place.prices().createMany(prices.map(m => pick(m, ['title', 'cost'])))
-    if (additional_services) await place.additional_services().createMany(additional_services)
+    const priceForms = prices.map(m => pick(m, ['title', 'cost']))
+    if (prices) await place.prices().createMany(priceForms)
+    const additionalServicesForms = additional_services.map(m => pick(m, ['title', 'price', 'description']))
+    if (additional_services) await place.additional_services().createMany(additionalServicesForms)
     return response.created(await Place.findComplete(place.id))
   }
 
