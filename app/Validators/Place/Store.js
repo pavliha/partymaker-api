@@ -20,7 +20,7 @@ module.exports = class Store extends Validator {
       'requirements.age_max': 'to_int',
       'requirements.players_min': 'to_int',
       'requirements.players_max': 'to_int',
-      'additional_services.*.price': 'to_int',
+      'additional_services.*.price': 'to_null',
     }
   }
 
