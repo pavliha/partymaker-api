@@ -1,6 +1,6 @@
 const { basename } = require('path')
 const Model = use('Model')
-const Env = use('Env')
+const Drive = use('Drive')
 
 class Photo extends Model {
 
@@ -17,7 +17,7 @@ class Photo extends Model {
   }
 
   getUrl(filename) {
-    return `${Env.get('APP_URL')}/uploads/${filename}`
+    return Drive.getUrl(filename)
   }
 
 }

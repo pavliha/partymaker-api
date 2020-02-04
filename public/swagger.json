@@ -474,10 +474,10 @@
         }
       }
     },
-    "/upload/picture/file": {
+    "/upload/file": {
       "post": {
         "tags": ["uploads"],
-        "summary": "Upload picture from the computer",
+        "summary": "Upload file from the computer",
         "security": [{"bearerAuth": []}],
         "parameters": [
           {
@@ -521,10 +521,10 @@
         }
       }
     },
-    "/upload/picture/url": {
+    "/upload/url": {
       "post": {
         "tags": ["uploads"],
-        "summary": "Upload picture from url",
+        "summary": "Upload from url",
         "security": [{"bearerAuth": []}],
         "parameters": [
           {

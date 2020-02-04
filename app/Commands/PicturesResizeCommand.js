@@ -1,9 +1,8 @@
 const { Command } = require('@adonisjs/ace')
-const util = require('util')
-const fs = require('fs')
-const readdir = util.promisify(fs.readdir)
-const Helpers = use('Helpers')
-const ImageProcessor = use('ImageProcessor')
+const Image = use('Image')
+const Place = use('App/Models/Place')
+const { basename } = require('path')
+
 
 class PicturesResizeCommand extends Command {
 
@@ -31,14 +30,14 @@ class PicturesResizeCommand extends Command {
   }
 
   async _createThumbnails(fileNames) {
-    const promises = fileNames.map(fileName => ImageProcessor.createThumbnail(fileName))
+    const promises = fileNames.map(fileName => Image.createThumbnail(fileName))
     this.info('Creating thumbnails...')
     const created = await Promise.all(promises)
     return this._displayCreatedCount(created, 'thumbnails')
   }
 
   async _createSlides(fileNames) {
-    const promises = fileNames.map(fileName => ImageProcessor.createSlide(fileName))
+    const promises = fileNames.map(fileName => Image.createSlide(fileName))
     this.info('Creating slides...')
     const created = await Promise.all(promises)
     return this._displayCreatedCount(created, 'slides')
@@ -50,16 +49,15 @@ class PicturesResizeCommand extends Command {
     await this._createSlides(originals)
   }
 
-  _findPictures(fileNames) {
-    return fileNames.filter(fileName => fileName.toLowerCase().match(/.(jpg|jpeg|png)$/i))
-  }
-
   async handle(args, options) {
     this.info('Reading files from uploads folder')
-    const uploadsPath = Helpers.publicPath('uploads/')
-    const fileNames = await readdir(uploadsPath)
-    await this._resize(this._findPictures(fileNames))
-    return this.success(`Processed ${fileNames.length} original pictures`)
+    const places = await Place.all()
+    const pictures = places.toJSON()
+      .map(p => p.picture_url)
+      .filter(url => !!url)
+      .map(url => basename(url))
+    await this._resize(pictures)
+    return this.success(`Processed ${pictures.length} original pictures`)
   }
 }
 

@@ -3,7 +3,6 @@ const { compare } = require('../../utils')
 const { pick } = require('lodash')
 
 const Model = use('Model')
-const Env = use('Env')
 const Drive = use('Drive')
 
 class Place extends Model {
@@ -57,8 +56,8 @@ class Place extends Model {
     return basename(url)
   }
 
-  getPictureUrl(url) {
-    return url ? `${Env.get('APP_URL')}/uploads/${url}` : null
+  getPictureUrl(filename) {
+    return Drive.getUrl(filename)
   }
 
   entertainment() {

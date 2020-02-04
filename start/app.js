@@ -33,8 +33,9 @@ const providers = [
   '@adonisjs/websocket/providers/WsProvider',
   '@adonisjs/drive/providers/DriveProvider',
   'adonis-bumblebee/providers/BumblebeeProvider',
-  local('SmsProvider'),
-  local('ImageProcessorProvider'),
+  local('Image/providers/ImageProvider'),
+  local('Upload/providers/UploadProvider'),
+  local('Sms/providers/SmsProvider'),
 ]
 
 /*
@@ -66,7 +67,8 @@ const aceProviders = [
 */
 const aliases = {
   Sms: 'App/Providers/Sms',
-  ImageProcessor: 'App/Providers/ImageProcessor'
+  Upload: 'App/Providers/Upload',
+  Image: 'App/Providers/Image'
 }
 
 /*
@@ -78,7 +80,8 @@ const aliases = {
 |
 */
 const commands = [
-  'App/Commands/PicturesResizeCommand'
+  'App/Commands/PicturesResizeCommand',
+  'App/Commands/PicturesReUploadCommand',
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }
