@@ -35,7 +35,6 @@ const providers = [
   'adonis-bumblebee/providers/BumblebeeProvider',
   local('Image/providers/ImageProvider'),
   local('Upload/providers/UploadProvider'),
-  local('Sms/providers/SmsProvider'),
 ]
 
 /*
@@ -66,7 +65,6 @@ const aceProviders = [
 |
 */
 const aliases = {
-  Sms: 'App/Providers/Sms',
   Upload: 'App/Providers/Upload',
   Image: 'App/Providers/Image'
 }
