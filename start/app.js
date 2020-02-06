@@ -49,7 +49,9 @@ const providers = [
 const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
   '@adonisjs/vow/providers/VowProvider',
-  'adonis-bumblebee/providers/CommandsProvider'
+  'adonis-bumblebee/providers/CommandsProvider',
+  local('Image/providers/ImageProvider'),
+  local('Upload/providers/UploadProvider'),
 ]
 
 /*

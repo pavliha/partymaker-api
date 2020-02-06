@@ -14,7 +14,7 @@ class PicturesResizeCommand extends Command {
     return 'Create thumbnails and slides for uploaded pictures'
   }
 
-  _findOriginals(fileNames) {
+  findOriginals(fileNames) {
     return fileNames.filter(fileName => {
       const isThumbnail = fileName.includes('thumbnail.')
       const isSlide = fileName.includes('slide.')
@@ -22,42 +22,51 @@ class PicturesResizeCommand extends Command {
     })
   }
 
-  _displayCreatedCount(created, label) {
+  show(created, label) {
     const countCreated = created.filter(isCreated => isCreated)
     return countCreated < 1
       ? this.warn(`All pictures have ${label}`)
       : this.success(`Created ${countCreated.length} ${label}`)
   }
 
-  async _createThumbnails(fileNames) {
-    const promises = fileNames.map(fileName => Image.createThumbnail(fileName))
-    this.info('Creating thumbnails...')
+  async create(fileNames, type) {
+    const promises = fileNames.map(async fileName => {
+      try {
+        return await Image.resize(fileName, type)
+      } catch (e) {
+        console.warn({ fileName })
+        return null
+      }
+    })
+    this.info(`Creating ${type}s...`)
     const created = await Promise.all(promises)
-    return this._displayCreatedCount(created, 'thumbnails')
+    return this.show(created, `${type}s`)
   }
 
-  async _createSlides(fileNames) {
-    const promises = fileNames.map(fileName => Image.createSlide(fileName))
-    this.info('Creating slides...')
-    const created = await Promise.all(promises)
-    return this._displayCreatedCount(created, 'slides')
+  async resize(fileNames) {
+    const originals = this.findOriginals(fileNames)
+    await this.create(originals, 'thumbnail')
+    await this.create(originals, 'slide')
   }
 
-  async _resize(fileNames) {
-    const originals = this._findOriginals(fileNames)
-    await this._createThumbnails(originals)
-    await this._createSlides(originals)
-  }
-
-  async handle(args, options) {
-    this.info('Reading files from uploads folder')
+  async select() {
     const places = await Place.all()
-    const pictures = places.toJSON()
+    return places.toJSON()
       .map(p => p.picture_url)
       .filter(url => !!url)
       .map(url => basename(url))
-    await this._resize(pictures)
-    return this.success(`Processed ${pictures.length} original pictures`)
+  }
+
+  async handle(args, options) {
+    try {
+
+      this.info('Reading files from uploads folder')
+      const pictures = await this.select()
+      await this.resize(pictures)
+      return this.success(`Processed ${pictures.length} original pictures`)
+    } catch (e) {
+      console.warn('catched')
+    }
   }
 }
 

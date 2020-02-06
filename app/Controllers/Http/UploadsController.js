@@ -24,7 +24,8 @@ class UploadsController {
   async url({ request, response }) {
     const { url, type } = request.all()
     const upload = await Upload.create(url)
-    const image = await Image.save(upload, type)
+    const image = await Image.create(upload, type)
+    await image.resize(type)
     return response.created({ url: image.getUrl() })
   }
 
@@ -39,7 +40,8 @@ class UploadsController {
   async file({ request, response }) {
     const type = request.input('type')
     const upload = await Upload.create(request.multipart)
-    const image = await Image.create(upload, type)
+    const image = await Image.create(upload)
+    await image.resize(type)
     return response.created({ url: image.url })
   }
 
