@@ -1,10 +1,8 @@
 const { Command } = require('@adonisjs/ace')
 const Image = use('Image')
-const Place = use('App/Models/Place')
-const { basename } = require('path')
+const S3 = use('S3')
 
-
-class PicturesResizeCommand extends Command {
+class ResizeCommand extends Command {
 
   static get signature() {
     return 'pictures:resize'
@@ -29,15 +27,8 @@ class PicturesResizeCommand extends Command {
       : this.success(`Created ${countCreated.length} ${label}`)
   }
 
-  async create(fileNames, type) {
-    const promises = fileNames.map(async fileName => {
-      try {
-        return await Image.resize(fileName, type)
-      } catch (e) {
-        console.warn({ fileName })
-        return null
-      }
-    })
+  async createFrom(fileNames, type) {
+    const promises = fileNames.map(async fileName => Image.resize(fileName, type))
     this.info(`Creating ${type}s...`)
     const created = await Promise.all(promises)
     return this.show(created, `${type}s`)
@@ -45,29 +36,17 @@ class PicturesResizeCommand extends Command {
 
   async resize(fileNames) {
     const originals = this.findOriginals(fileNames)
-    await this.create(originals, 'thumbnail')
-    await this.create(originals, 'slide')
-  }
-
-  async select() {
-    const places = await Place.all()
-    return places.toJSON()
-      .map(p => p.picture_url)
-      .filter(url => !!url)
-      .map(url => basename(url))
+    await this.createFrom(originals, 'thumbnail')
+    await this.createFrom(originals, 'slide')
   }
 
   async handle(args, options) {
-    try {
-
-      this.info('Reading files from uploads folder')
-      const pictures = await this.select()
-      await this.resize(pictures)
-      return this.success(`Processed ${pictures.length} original pictures`)
-    } catch (e) {
-      console.warn('catched')
-    }
+    this.info('Reading files from uploads folder')
+    const pictures = await S3.list()
+    await this.resize(pictures)
+    this.success(`Processed ${pictures.length} original pictures`)
+    process.exit()
   }
 }
 
-module.exports = PicturesResizeCommand
+module.exports = ResizeCommand

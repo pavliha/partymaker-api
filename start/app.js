@@ -5,7 +5,6 @@ moment.locale('ru')
 
 const local = name => path.join(__dirname, '..', 'providers', name)
 
-
 /*
 |--------------------------------------------------------------------------
 | Providers
@@ -35,6 +34,7 @@ const providers = [
   'adonis-bumblebee/providers/BumblebeeProvider',
   local('Image/providers/ImageProvider'),
   local('Upload/providers/UploadProvider'),
+  local('S3/providers/S3Provider'),
 ]
 
 /*
@@ -50,8 +50,6 @@ const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
   '@adonisjs/vow/providers/VowProvider',
   'adonis-bumblebee/providers/CommandsProvider',
-  local('Image/providers/ImageProvider'),
-  local('Upload/providers/UploadProvider'),
 ]
 
 /*
@@ -68,7 +66,9 @@ const aceProviders = [
 */
 const aliases = {
   Upload: 'App/Providers/Upload',
-  Image: 'App/Providers/Image'
+  Image: 'App/Providers/Image',
+  S3: 'App/Providers/S3'
+
 }
 
 /*
@@ -80,8 +80,8 @@ const aliases = {
 |
 */
 const commands = [
-  'App/Commands/PicturesResizeCommand',
-  'App/Commands/PicturesReUploadCommand',
+  'App/Commands/Pictures/ResizeCommand',
+  'App/Commands/Pictures/UploadCommand',
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }

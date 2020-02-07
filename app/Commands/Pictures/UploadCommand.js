@@ -5,10 +5,10 @@ const axios = require('axios')
 const Place = use('App/Models/Place')
 const Drive = use('Drive')
 
-class PicturesReUploadCommand extends Command {
+class UploadCommand extends Command {
 
   static get signature() {
-    return 'pictures:re-upload'
+    return 'pictures:upload'
   }
 
   static get description() {
@@ -47,4 +47,4 @@ class PicturesReUploadCommand extends Command {
   }
 }
 
-module.exports = PicturesReUploadCommand
+module.exports = UploadCommand
