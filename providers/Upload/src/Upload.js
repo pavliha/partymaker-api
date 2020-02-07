@@ -1,7 +1,7 @@
 const isUrl = require('is-url')
-const UrlDriver = require('./Drivers/UrlDriver')
-const MultipartDriver = require('./Drivers/MultipartDriver')
-const StreamDriver = require('./Drivers/StreamDriver')
+const UrlUpload = require('./UrlUpload')
+const MultipartUpload = require('./MultipartUpload')
+const StreamUpload = require('./StreamUpload')
 
 class Upload {
 
@@ -10,14 +10,14 @@ class Upload {
   }
 
   create(data) {
-    const Driver = isUrl(data) ? UrlDriver : MultipartDriver
-    const driver = new Driver(this.drive)
-    return driver.create(data)
+    const SelectedUpload = isUrl(data) ? UrlUpload : MultipartUpload
+    const upload = new SelectedUpload(this.drive)
+    return upload.create(data)
   }
 
   get(fileName) {
-    const driver = new StreamDriver(this.drive)
-    return driver.create(fileName)
+    const upload = new StreamUpload(this.drive)
+    return upload.create(fileName)
   }
 }
 

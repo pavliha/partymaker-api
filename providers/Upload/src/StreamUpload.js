@@ -1,6 +1,6 @@
-const Driver = require('./Driver')
+const BaseUpload = require('./BaseUpload')
 
-class StreamDriver extends Driver {
+class StreamUpload extends BaseUpload {
 
   create(fileName) {
     this.fileName = fileName
@@ -10,4 +10,4 @@ class StreamDriver extends Driver {
 
 }
 
-module.exports = StreamDriver
+module.exports = StreamUpload

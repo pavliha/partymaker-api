@@ -1,9 +1,9 @@
 const { basename } = require('path')
-const Driver = require('./Driver')
+const BaseUpload = require('./BaseUpload')
 const fetch = require('node-fetch')
 
 
-class UrlDriver extends Driver {
+class UrlUpload extends BaseUpload {
 
   async create(url) {
     const response = await fetch(url)
@@ -22,4 +22,4 @@ class UrlDriver extends Driver {
 
 }
 
-module.exports = UrlDriver
+module.exports = UrlUpload

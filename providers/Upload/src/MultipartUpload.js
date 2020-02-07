@@ -1,7 +1,7 @@
 const sanitizeFileName = require('sanitize-filename')
-const Driver = require('./Driver')
+const BaseUpload = require('./BaseUpload')
 
-class MultipartDriver extends Driver {
+class MultipartUpload extends BaseUpload {
 
   async create(multipart) {
     const file = await this._process(multipart)
@@ -29,4 +29,4 @@ class MultipartDriver extends Driver {
 
 }
 
-module.exports = MultipartDriver
+module.exports = MultipartUpload

@@ -1,5 +1,6 @@
 /* eslint-disable */
-class Driver {
+
+class BaseUpload {
 
   fileName = null
   fileStream = null
@@ -52,4 +53,4 @@ class Driver {
 
 }
 
-module.exports = Driver
+module.exports = BaseUpload
