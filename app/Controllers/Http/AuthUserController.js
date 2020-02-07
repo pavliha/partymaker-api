@@ -1,6 +1,6 @@
 const User = use('App/Models/User')
 
-class UserController {
+class AuthUserController {
 
   /**
    * get current user model
@@ -26,4 +26,4 @@ class UserController {
   }
 }
 
-module.exports = UserController
+module.exports = AuthUserController
