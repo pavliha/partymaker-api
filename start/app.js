@@ -81,7 +81,6 @@ const aliases = {
 */
 const commands = [
   'App/Commands/Pictures/ResizeCommand',
-  'App/Commands/Pictures/UploadCommand',
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }
